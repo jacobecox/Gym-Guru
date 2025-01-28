@@ -1,13 +1,36 @@
+"use client";
 import Image from "next/image";
 import DarkModeToggle from "./components/darkModeToggle";
+import { useRouter } from "next/navigation";
 
 export default function App() {
+  const router = useRouter();
+
+  const exploreExercisesClick = () => {
+    router.push("/pages/allExercises");
+  };
+
+  const savedExercises = () => {
+    router.push("/pages/savedExercises");
+  };
+
+  const workoutPlan = () => {
+    router.push("/pages/workoutPlan");
+  };
+
+  const login = () => {
+    router.push("/pages/login");
+  };
+
   return (
     <main className="bg-white dark:bg-black">
       <div>
         <div className="flex justify-between items-center p-6 absolute top-0 left-0 right-0">
           <DarkModeToggle />
-          <button className="text-right bg-black text-white dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md p-2 hover:bg-yellow-400 hover:text-black dark:hover:bg-white">
+          <button
+            onClick={login}
+            className="text-right bg-black text-white dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 hover:bg-yellow-400 hover:text-black dark:hover:bg-white"
+          >
             Login
           </button>
         </div>
@@ -45,13 +68,22 @@ export default function App() {
         </div>
       </div>
       <div className="flex flex-col space-y-4 items-stretch justify-center max-w-lg mx-auto w-full py-4">
-        <button className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400">
+        <button
+          onClick={exploreExercisesClick}
+          className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400"
+        >
           Explore Exercises
         </button>
-        <button className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400">
+        <button
+          onClick={savedExercises}
+          className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400"
+        >
           Saved Exercises
         </button>
-        <button className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400">
+        <button
+          onClick={workoutPlan}
+          className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400"
+        >
           My Workout Plan
         </button>
       </div>
