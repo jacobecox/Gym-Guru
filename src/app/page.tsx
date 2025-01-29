@@ -23,13 +23,13 @@ export default function App() {
   };
 
   return (
-    <main className="bg-white dark:bg-black">
+    <div className="bg-white dark:bg-black">
       <div>
         <div className="flex justify-between items-center p-6 absolute top-0 left-0 right-0">
           <DarkModeToggle />
           <button
             onClick={login}
-            className="text-right bg-black text-white dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 hover:bg-yellow-400 hover:text-black dark:hover:bg-white"
+            className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
           >
             Login
           </button>
@@ -87,6 +87,6 @@ export default function App() {
           My Workout Plan
         </button>
       </div>
-    </main>
+    </div>
   );
 }
