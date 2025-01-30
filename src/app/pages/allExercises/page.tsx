@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import DarkModeToggle from "@/app/components/darkModeToggle";
 import { useRouter } from "next/navigation";
@@ -11,14 +12,21 @@ import { Exercise } from "@/app/types";
 
 export default function AllExercises() {
   const dispatch = useDispatch<AppDispatch>();
-  const { exercises, loading } = useSelector(
+  const { pages, currentOffset, loading } = useSelector(
     (state: RootState) => state.exercises
   );
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(fetchExercises());
-  }, [dispatch]);
+    if (!pages[currentOffset])
+      dispatch(fetchExercises({ offset: currentOffset }));
+  }, [dispatch, currentOffset, pages]);
+
+  const exercises = Object.values(pages).flat();
+
+  console.log("exercises:", exercises);
+  console.log("pages:", pages);
+  console.log("current offset:", currentOffset);
 
   const handleBack = () => {
     router.push("/");
