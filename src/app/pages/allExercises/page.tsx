@@ -7,7 +7,7 @@ import { RootState, AppDispatch } from "@/app/store/store";
 import LoadingSpinner from "@/app/components/loadingSpinner";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchExercises } from "@/app/store/slices/allExercise";
+import { fetchExercises, loadMore } from "@/app/store/slices/allExercise";
 import { Exercise } from "@/app/types";
 
 export default function AllExercises() {
@@ -24,17 +24,9 @@ export default function AllExercises() {
 
   const exercises = Object.values(pages).flat();
 
-  console.log("exercises:", exercises);
-  console.log("pages:", pages);
-  console.log("current offset:", currentOffset);
-
   const handleBack = () => {
     router.push("/");
   };
-
-  if (loading === true) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div className="bg-white dark:bg-black">
@@ -52,7 +44,7 @@ export default function AllExercises() {
         </h1>
       </div>
       <div className=" p-2 grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {exercises[0]?.map((exercise: Exercise) => {
+        {exercises?.map((exercise: Exercise) => {
           return (
             <div
               key={exercise.id}
@@ -79,6 +71,15 @@ export default function AllExercises() {
             </div>
           );
         })}
+      </div>
+      <div className="flex flex-col justify-center items-center">
+        {loading === true ? <LoadingSpinner /> : null}
+        <button
+          onClick={() => dispatch(loadMore())}
+          className="text-black bg-yellow-400 rounded-lg p-6 my-8 text-xl font-bold"
+        >
+          Load More
+        </button>
       </div>
     </div>
   );

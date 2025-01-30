@@ -15,7 +15,7 @@ export default function RootLayout({
         <title>Gym Guru</title>
       </Head>
       <html lang="en">
-        <body>
+        <body className="bg-white dark:bg-black">
           <Provider store={store}>{children}</Provider>
         </body>
       </html>

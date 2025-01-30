@@ -23,7 +23,7 @@ export default function App() {
   };
 
   return (
-    <div className="bg-white dark:bg-black">
+    <main className="bg-white dark:bg-black">
       <div>
         <div className="flex justify-between items-center p-6 absolute top-0 left-0 right-0">
           <DarkModeToggle />
@@ -87,6 +87,6 @@ export default function App() {
           My Workout Plan
         </button>
       </div>
-    </div>
+    </main>
   );
 }
