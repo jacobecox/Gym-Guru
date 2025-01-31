@@ -24,7 +24,6 @@ export const fetchExercises = createAsyncThunk<Exercise, Params>(
     if (state.exercises.pages[offset]) {
       return state.exercises.pages[offset];
     }
-
     const response = await axios.request(options);
     return response.data;
   }
@@ -35,7 +34,7 @@ type ExerciseState = {
   pages: { [offset: number]: Exercise };
   currentOffset: number;
   loading: boolean;
-  error: string | null | undefined;
+  error?: string | null;
 };
 
 const initialState: ExerciseState = {

@@ -33,8 +33,16 @@ export const fetchEquipmentCategories = createAsyncThunk(
   }
 );
 
-const initialState = {
-  categories: [],
+type categoryState = {
+  muscleCategories: string[];
+  equipmentCategories: string[];
+  loading: boolean;
+  error?: string | null;
+};
+
+const initialState: categoryState = {
+  muscleCategories: [],
+  equipmentCategories: [],
   loading: false,
   error: null,
 };
@@ -43,4 +51,30 @@ export const categoriesSlice = createSlice({
   name: "categories",
   initialState,
   reducers: {},
+
+  extraReducers: (builder) => {
+    builder.addCase(fetchMuscleCategories.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchMuscleCategories.fulfilled, (state, action) => {
+      state.loading = false;
+      state.muscleCategories = action.payload;
+    });
+    builder.addCase(fetchMuscleCategories.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(fetchEquipmentCategories.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchEquipmentCategories.fulfilled, (state, action) => {
+      state.loading = false;
+      state.equipmentCategories = action.payload;
+    });
+    builder.addCase(fetchEquipmentCategories.rejected, (state, action) => {
+      state.error = action.error.message;
+    });
+  },
 });
+
+export default categoriesSlice.reducer;

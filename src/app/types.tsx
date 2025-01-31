@@ -9,3 +9,9 @@ export type Exercise = {
 export type Params = {
   offset: number;
 };
+
+export type CategoryFilter = {
+  offset: number;
+  muscleCategory: string;
+  equipmentCategory: string;
+};

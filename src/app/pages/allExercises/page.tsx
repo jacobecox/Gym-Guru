@@ -11,11 +11,18 @@ import { fetchExercises, loadMore } from "@/app/store/slices/allExercise";
 import { Exercise } from "@/app/types";
 
 export default function AllExercises() {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+
   const { pages, currentOffset, loading } = useSelector(
     (state: RootState) => state.exercises
   );
-  const router = useRouter();
+  const muscleCategories = useSelector(
+    (state: RootState) => state.categories.muscleCategories
+  );
+  const equipmentCategories = useSelector(
+    (state: RootState) => state.categories.equipmentCategories
+  );
 
   useEffect(() => {
     if (!pages[currentOffset])
@@ -27,6 +34,8 @@ export default function AllExercises() {
   const handleBack = () => {
     router.push("/");
   };
+
+  const handleFilter = () => {};
 
   return (
     <div className="bg-white dark:bg-black">
@@ -42,6 +51,20 @@ export default function AllExercises() {
         <h1 className="text-7xl text-black dark:text-white font-extrabold text-center p-6 ">
           Explore Exercises
         </h1>
+        <h1 className="text-3xl text-black dark:text-white font-extrabold text-center p-6 ">
+          Filter By Category:
+        </h1>
+        <div className="text-center text-white text-2xl">
+          {muscleCategories?.map((muscleCategory) => {
+            return (
+              <div key={muscleCategory}>
+                <button onClick={() => dispatch({ muscleCategory })}>
+                  {muscleCategory}
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
       <div className=" p-2 grid grid-cols-1 lg:grid-cols-3 gap-4">
         {exercises?.map((exercise: Exercise) => {
