@@ -20,9 +20,6 @@ export default function AllExercises() {
   const muscleCategories = useSelector(
     (state: RootState) => state.categories.muscleCategories
   );
-  const equipmentCategories = useSelector(
-    (state: RootState) => state.categories.equipmentCategories
-  );
 
   useEffect(() => {
     if (!pages[currentOffset])
@@ -34,8 +31,6 @@ export default function AllExercises() {
   const handleBack = () => {
     router.push("/");
   };
-
-  const handleFilter = () => {};
 
   return (
     <div className="bg-white dark:bg-black">
@@ -58,9 +53,7 @@ export default function AllExercises() {
           {muscleCategories?.map((muscleCategory) => {
             return (
               <div key={muscleCategory}>
-                <button onClick={() => dispatch({ muscleCategory })}>
-                  {muscleCategory}
-                </button>
+                <button>{muscleCategory}</button>
               </div>
             );
           })}
