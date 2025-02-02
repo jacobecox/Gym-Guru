@@ -21,6 +21,10 @@ export default function AllExercises() {
     (state: RootState) => state.categories.muscleCategories
   );
 
+  const equipmentCategories = useSelector(
+    (state: RootState) => state.categories.equipmentCategories
+  );
+
   useEffect(() => {
     if (!pages[currentOffset])
       dispatch(fetchExercises({ offset: currentOffset }));
@@ -46,17 +50,31 @@ export default function AllExercises() {
         <h1 className="text-7xl text-black dark:text-white font-extrabold text-center p-6 ">
           Explore Exercises
         </h1>
-        <h1 className="text-3xl text-black dark:text-white font-extrabold text-center p-6 ">
-          Filter By Category:
-        </h1>
-        <div className="text-center text-white text-2xl">
-          {muscleCategories?.map((muscleCategory) => {
-            return (
-              <div key={muscleCategory}>
-                <button>{muscleCategory}</button>
-              </div>
-            );
-          })}
+        <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
+          {/* Filter Muscle dropdown */}
+          <select className="w-full md:w-1/2 p-2 border rounded-lg text-black bg-yellow-400 font-bold text-center text-2xl">
+            <option value="" disabled hidden>
+              Filter by Muscle
+            </option>
+            {muscleCategories.map((muscleCategory) => {
+              return (
+                <option key={muscleCategory.name} value={muscleCategory.name}>
+                  {" "}
+                  {muscleCategory.name.toUpperCase()}
+                </option>
+              );
+            })}
+          </select>
+
+          <div className="text-center text-white text-2xl">
+            {equipmentCategories?.map((equipmentCategory) => {
+              return (
+                <div key={equipmentCategory.name}>
+                  <button>{equipmentCategory.name}</button>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
       <div className=" p-2 grid grid-cols-1 lg:grid-cols-3 gap-4">

@@ -1,41 +1,26 @@
-import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import type { MuscleCategory, EquipmentCategory } from "@/app/types";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 export const fetchMuscleCategories = createAsyncThunk(
   "muscleCategories, fetchMuscleCategories",
   async () => {
-    const muscleCategories = {
-      method: "GET",
-      url: "https://exercisedb.p.rapidapi.com/exercises/targetList",
-      headers: {
-        "x-rapidapi-key": "e4ef8a100amsh64365792fac0c97p12ba9ajsna2191e132105",
-        "x-rapidapi-host": "exercisedb.p.rapidapi.com",
-      },
-    };
-    const response = await axios.request(muscleCategories);
-    return response.data;
+    const response = await fetch("http://localhost:8000/muscleCategories");
+    return response.json();
   }
 );
 
 export const fetchEquipmentCategories = createAsyncThunk(
   "equipmentCategories, fetchEquipmentCategories",
   async () => {
-    const equipmentCategories = {
-      method: "GET",
-      url: "https://exercisedb.p.rapidapi.com/exercises/equipmentList",
-      headers: {
-        "x-rapidapi-key": "e4ef8a100amsh64365792fac0c97p12ba9ajsna2191e132105",
-        "x-rapidapi-host": "exercisedb.p.rapidapi.com",
-      },
-    };
-    const response = await axios.request(equipmentCategories);
-    return response.data;
+    const response = await fetch("http://localhost:8000/equipmentCategories");
+    return response.json();
   }
 );
 
 type categoryState = {
-  muscleCategories: string[];
-  equipmentCategories: string[];
+  muscleCategories: MuscleCategory[];
+  equipmentCategories: EquipmentCategory[];
   loading: boolean;
   error?: string | null;
 };
@@ -50,7 +35,11 @@ const initialState: categoryState = {
 export const categoriesSlice = createSlice({
   name: "categories",
   initialState,
-  reducers: {},
+  reducers: {
+    setMuscleCategories: (state, action: PayloadAction<MuscleCategory[]>) => {
+      state.muscleCategories = action.payload;
+    },
+  },
 
   extraReducers: (builder) => {
     builder.addCase(fetchMuscleCategories.pending, (state) => {

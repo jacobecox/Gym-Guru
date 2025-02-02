@@ -10,7 +10,8 @@ dotenv.config();
 const API_KEY = process.env.NEXT_PUBLIC_RAPIDAPI_KEY
 const API_HOST = process.env.NEXT_PUBLIC_RAPIDAPI_HOST
 
-router.get('/exercises', async (req, res) => {
+// Route to get all exercises from ExerciseDB API
+router.get('/exercises-from-api', async (req, res) => {
   try {
     const response = await axios.get(`https://${API_HOST}/exercises?limit=0`, {
       headers: {

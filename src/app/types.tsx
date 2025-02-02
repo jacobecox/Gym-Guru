@@ -15,3 +15,11 @@ export type CategoryFilter = {
   muscleCategory: string;
   equipmentCategory: string;
 };
+
+export type MuscleCategory = {
+  name: string;
+};
+
+export type EquipmentCategory = {
+  name: string;
+};

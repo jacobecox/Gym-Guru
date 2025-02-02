@@ -1,71 +1,28 @@
 import express from "express";
-import axios from "axios";
-import dotenv from 'dotenv';
 import MuscleCategory from "../models/muscleCategory.js";
 import EquipmentCategory from "../models/equipmentCategory.js"
 
 const router = express.Router();
 
-dotenv.config();
-
-const API_KEY = process.env.NEXT_PUBLIC_RAPIDAPI_KEY
-const API_HOST = process.env.NEXT_PUBLIC_RAPIDAPI_HOST
-
-// Route to fetch Muscle Categories from API
-router.get('/muscleCategories', async (req, res) => {
+// Route to get muscle categories from db
+router.get('/muscleCategories', async (req, res, next) => {
   try {
-    const response = await axios.get(`https://${API_HOST}/exercises/targetList`, {
-      headers: {
-        'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': API_HOST,
-      }
-    });
-    const muscleCategories = response.data
-    
-    const savedMuscleCategories = await Promise.all(
-      muscleCategories.map(async (muscleCategoryName) => {
-        // Checks to see if the muscle category exists already
-        const existingMuscleCategory = await MuscleCategory.findOne({ name: muscleCategoryName})
-
-        if (!existingMuscleCategory) {
-          return await MuscleCategory.create({ name: muscleCategoryName });
-        }
-        return existingMuscleCategory;
-      })
-    )
-    res.json({ message: 'Muscle categories fetched and stored successfully', muscleCategories: savedMuscleCategories})
-  } catch (err) {
-    console.error('Error fetching data:',err)
-    res.status(500).json({ error: 'Failed to fetch data from ExerciseDB API'})
+    const muscleCategories = await MuscleCategory.find()
+    res.status(200).json(muscleCategories);
+  }
+  catch (err) {
+    next(err)
   }
 });
 
-// Route to get Equipment Categories from API
-router.get('/equipmentCategories', async (req, res) => {
+// Route to get equipment categories from db
+router.get('/equipmentCategories', async (req, res, next) => {
   try {
-    const response = await axios.get(`https://${API_HOST}/exercises/equipmentList`, {
-      headers: {
-        'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': API_HOST,
-      }
-    });
-    const equipmentCategories = response.data
-    
-    const savedEquipmentCategories = await Promise.all(
-      equipmentCategories.map(async (equipmentCategoryName) => {
-        // Checks to see if the equipment category exists already
-        const existingEquipmentCategory = await EquipmentCategory.findOne({ name: equipmentCategoryName})
-
-        if (!existingEquipmentCategory) {
-          return await EquipmentCategory.create({ name: equipmentCategoryName });
-        }
-        return existingEquipmentCategory;
-      })
-    )
-    res.json({ message: 'Equipment categories fetched and stored successfully', equipmentCategories: savedEquipmentCategories})
-  } catch (err) {
-    console.error('Error fetching data:',err)
-    res.status(500).json({ error: 'Failed to fetch data from ExerciseDB API'})
+    const equipmentCategories = await EquipmentCategory.find()
+    res.status(200).json(equipmentCategories);
+  }
+  catch (err) {
+    next(err)
   }
 });
 
