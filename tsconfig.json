@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "src/app/server.tsx",
     "routes/getCategories.js",
-    "models/category.js"
+    "models/muscleCategory.js",
+    "routes/getAllExercises.js"
   ],
   "exclude": ["node_modules"]
 }
