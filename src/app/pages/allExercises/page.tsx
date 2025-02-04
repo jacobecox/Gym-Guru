@@ -6,13 +6,24 @@ import { useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/app/store/store";
 import LoadingSpinner from "@/app/components/loadingSpinner";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchExercises, loadMore } from "@/app/store/slices/allExercise";
 import { Exercise } from "@/app/types";
+import {
+  setMuscleFilter,
+  setEquipmentFilter,
+} from "@/app/store/slices/allCategories";
 
 export default function AllExercises() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+
+  const [exercise, setExercise] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(1);
+
+  const filters = useSelector((state: RootState) => state.categories.filters);
 
   const { pages, currentOffset, loading } = useSelector(
     (state: RootState) => state.exercises
@@ -30,7 +41,32 @@ export default function AllExercises() {
       dispatch(fetchExercises({ offset: currentOffset }));
   }, [dispatch, currentOffset, pages]);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const params = new URLSearchParams({
+        page: String(currentPage),
+        muscle: filters.muscle,
+        equipment: filters.equipment,
+      });
+
+      console.log("query muscle filter:", filters.muscle);
+      console.log("query equipment filter:", filters.equipment);
+      console.log("current page:", currentPage);
+
+      const res = await fetch(`http:localhost:8000/allExercises?${params}`);
+      const data = await res.json();
+      setExercise(data);
+    };
+
+    fetchProducts();
+  }, [filters.muscle, filters.equipment, currentPage]);
+
   const exercises = Object.values(pages).flat();
+
+  const handlePageChange = (page) => {
+    // Sets the current page to change to whatever page was selected
+    setCurrentPage(page);
+  };
 
   const handleBack = () => {
     router.push("/");
@@ -52,15 +88,20 @@ export default function AllExercises() {
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
           {/* Filter Muscle dropdown */}
-          <select className="w-full md:w-1/2 p-2 border rounded-lg text-black bg-yellow-400 font-bold text-center text-2xl">
+          <select
+            value={filters.muscle}
+            onChange={(e) => dispatch(setMuscleFilter(e.target.value))}
+            className="w-full md:w-1/2 p-2 border rounded-lg text-black bg-yellow-400 font-bold text-center text-2xl"
+          >
             <option value="" disabled hidden>
               Filter by Muscle
             </option>
+            <option>All</option>
             {muscleCategories.map((muscleCategory) => {
               return (
                 <option key={muscleCategory.name} value={muscleCategory.name}>
                   {" "}
-                  {muscleCategory.name.toUpperCase()}
+                  {muscleCategory.name}
                 </option>
               );
             })}
@@ -114,6 +155,23 @@ export default function AllExercises() {
         >
           Load More
         </button>
+      </div>
+      {/* Page Toggle Buttons */}
+      <p className="font-bold text-center py-1 mt-6">Page</p>
+      <div className="flex justify-center space-x-2">
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i + 1}
+            className={`px-3 py-1 rounded ${
+              currentPage === i + 1
+                ? "bg-yellow-400 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
+            onClick={() => handlePageChange(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
       </div>
     </div>
   );

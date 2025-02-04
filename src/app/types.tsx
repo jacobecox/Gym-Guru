@@ -23,3 +23,8 @@ export type MuscleCategory = {
 export type EquipmentCategory = {
   name: string;
 };
+
+export type FilterCategory = {
+  muscle: string;
+  equipment: string;
+};

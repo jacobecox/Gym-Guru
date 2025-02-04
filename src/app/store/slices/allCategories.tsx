@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import type { MuscleCategory, EquipmentCategory } from "@/app/types";
-import { PayloadAction } from "@reduxjs/toolkit";
+import type {
+  MuscleCategory,
+  EquipmentCategory,
+  FilterCategory,
+} from "@/app/types";
 
 export const fetchMuscleCategories = createAsyncThunk(
   "muscleCategories, fetchMuscleCategories",
@@ -21,6 +24,7 @@ export const fetchEquipmentCategories = createAsyncThunk(
 type categoryState = {
   muscleCategories: MuscleCategory[];
   equipmentCategories: EquipmentCategory[];
+  filters: FilterCategory;
   loading: boolean;
   error?: string | null;
 };
@@ -28,6 +32,10 @@ type categoryState = {
 const initialState: categoryState = {
   muscleCategories: [],
   equipmentCategories: [],
+  filters: {
+    muscle: "",
+    equipment: "",
+  },
   loading: false,
   error: null,
 };
@@ -36,8 +44,13 @@ export const categoriesSlice = createSlice({
   name: "categories",
   initialState,
   reducers: {
-    setMuscleCategories: (state, action: PayloadAction<MuscleCategory[]>) => {
-      state.muscleCategories = action.payload;
+    setMuscleFilter: (state, action) => {
+      state.filters.muscle = action.payload;
+      console.log("muscle filter:", action.payload);
+    },
+    setEquipmentFilter: (state, action) => {
+      state.filters.equipment = action.payload;
+      console.log("equipment filter:", action.payload);
     },
   },
 
@@ -66,4 +79,5 @@ export const categoriesSlice = createSlice({
   },
 });
 
+export const { setMuscleFilter, setEquipmentFilter } = categoriesSlice.actions;
 export default categoriesSlice.reducer;
