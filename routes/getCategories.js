@@ -5,7 +5,7 @@ import EquipmentCategory from "../models/equipmentCategory.js"
 const router = express.Router();
 
 // Route to get muscle categories from db
-router.get('/muscleCategories', async (req, res, next) => {
+router.get('/muscle-categories', async (req, res, next) => {
   try {
     const muscleCategories = await MuscleCategory.find()
     res.status(200).json(muscleCategories);
@@ -16,7 +16,7 @@ router.get('/muscleCategories', async (req, res, next) => {
 });
 
 // Route to get equipment categories from db
-router.get('/equipmentCategories', async (req, res, next) => {
+router.get('/equipment-categories', async (req, res, next) => {
   try {
     const equipmentCategories = await EquipmentCategory.find()
     res.status(200).json(equipmentCategories);

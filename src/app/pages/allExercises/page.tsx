@@ -53,7 +53,7 @@ export default function AllExercises() {
       console.log("query equipment filter:", filters.equipment);
       console.log("current page:", currentPage);
 
-      const res = await fetch(`http:localhost:8000/allExercises?${params}`);
+      const res = await fetch(`http://localhost:8000/all-exercises?${params}`);
       const data = await res.json();
       setExercise(data);
     };
@@ -107,15 +107,28 @@ export default function AllExercises() {
             })}
           </select>
 
-          <div className="text-center text-white text-2xl">
-            {equipmentCategories?.map((equipmentCategory) => {
+          {/* Filter equipment dropdown */}
+          <select
+            value={filters.equipment}
+            onChange={(e) => dispatch(setEquipmentFilter(e.target.value))}
+            className="w-full md:w-1/2 p-2 border rounded-lg text-black bg-yellow-400 font-bold text-center text-2xl"
+          >
+            <option value="" disabled hidden>
+              Filter by Equipment
+            </option>
+            <option>All</option>
+            {equipmentCategories.map((equipmentCategory) => {
               return (
-                <div key={equipmentCategory.name}>
-                  <button>{equipmentCategory.name}</button>
-                </div>
+                <option
+                  key={equipmentCategory.name}
+                  value={equipmentCategory.name}
+                >
+                  {" "}
+                  {equipmentCategory.name}
+                </option>
               );
             })}
-          </div>
+          </select>
         </div>
       </div>
       <div className=" p-2 grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -136,42 +149,29 @@ export default function AllExercises() {
                   Equipment: {exercise.equipment}
                 </h1>
               </div>
-              <div className="flex justify-center">
-                <img
-                  src={exercise.gifUrl}
-                  alt="Exercise Gif"
-                  className="rounded-lg"
-                />
-              </div>
             </div>
           );
         })}
       </div>
       <div className="flex flex-col justify-center items-center">
         {loading === true ? <LoadingSpinner /> : null}
-        <button
-          onClick={() => dispatch(loadMore())}
-          className="text-black bg-yellow-400 rounded-lg p-6 my-8 text-xl font-bold"
-        >
-          Load More
-        </button>
-      </div>
-      {/* Page Toggle Buttons */}
-      <p className="font-bold text-center py-1 mt-6">Page</p>
-      <div className="flex justify-center space-x-2">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i + 1}
-            className={`px-3 py-1 rounded ${
-              currentPage === i + 1
-                ? "bg-yellow-400 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-            onClick={() => handlePageChange(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
+        {/* Page Toggle Buttons */}
+        <p className="font-bold text-center py-1 mt-6">Page</p>
+        <div className="flex justify-center space-x-2">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              className={`px-3 py-1 rounded ${
+                currentPage === i + 1
+                  ? "bg-yellow-400 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+              onClick={() => handlePageChange(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

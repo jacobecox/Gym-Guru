@@ -8,7 +8,7 @@ import type {
 export const fetchMuscleCategories = createAsyncThunk(
   "muscleCategories, fetchMuscleCategories",
   async () => {
-    const response = await fetch("http://localhost:8000/muscleCategories");
+    const response = await fetch("http://localhost:8000/muscle-categories");
     return response.json();
   }
 );
@@ -16,7 +16,7 @@ export const fetchMuscleCategories = createAsyncThunk(
 export const fetchEquipmentCategories = createAsyncThunk(
   "equipmentCategories, fetchEquipmentCategories",
   async () => {
-    const response = await fetch("http://localhost:8000/equipmentCategories");
+    const response = await fetch("http://localhost:8000/equipment-categories");
     return response.json();
   }
 );

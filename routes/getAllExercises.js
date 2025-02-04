@@ -3,31 +3,31 @@ import Exercise from '../models/exercise.js'
 
 const router = express.Router();
 
-router.get('/allExercises', async (req, res, next) => {
+router.get('/all-exercises', async (req, res, next) => {
   try {
-    const { muscle, equipment, page } = req.query
+    const { muscle, equipment, page = 1 } = req.query
 
     const query = {};
 
     if (muscle && muscle !== 'All') {
-      query.target = muscle
+      query["exercise.target"] = muscle;
     }
 
     if (equipment && equipment !== 'All') {
-      query.equipment = equipment
+      query["exercise.equipment"] = equipment;
     }
 
-    const perPage = 15;
+    const perPage = 15;  
 
-    const exercises = await Exercise.find(query)
+    const exercises = await Exercise.find(query)  
     .skip(perPage * page - perPage)
     .limit(perPage),
-    totalExercises = Exercise.countDocuments(query)
+    totalExercises = await Exercise.countDocuments(query)
 
     res.json({
       exercises,
       currentPage: parseInt(page, 10),
-      totalPages: Math.ceil(totalItems / perPage),
+      totalPages: Math.ceil(totalExercises / perPage),
       totalExercises: totalExercises,
     });
 
@@ -35,3 +35,5 @@ router.get('/allExercises', async (req, res, next) => {
     next(err)
   }
 })
+
+export default router
