@@ -49,7 +49,7 @@ export default function App() {
             height={500}
           />
         </div>
-        <div className="flex flex-col lg:flex-row justify-center p-2 items-center">
+        <div className="flex flex-col xl:flex-row justify-center p-2 items-center">
           <div className="text-center text-xl dark:text-white mx-auto max-w-2xl px-2">
             <p className="font-bold text-5xl py-2 text-black dark:text-white">
               Gym Guru is here to help create a simplified exercise discovery

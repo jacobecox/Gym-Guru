@@ -72,6 +72,10 @@ export default function AllExercises() {
     router.push("/");
   };
 
+  const handleClick = (id: number) => {
+    router.push(`/pages/exercise/${id}`);
+  };
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -159,8 +163,11 @@ export default function AllExercises() {
       <div className=" p-8 grid grid-cols-1 xl:grid-cols-3 gap-4">
         {exercises?.map((exercise: Exercises) => {
           return (
-            <div
+            <button
               key={exercise.exercise.id}
+              onClick={() => {
+                handleClick(exercise.exercise.id);
+              }}
               className="dark:bg-gray-900 bg-gray-400 rounded-lg p-6 m-2"
             >
               <h1 className=" font-extrabold text-5xl text-center tracking-wide text-black dark:text-yellow-400 uppercase">
@@ -184,7 +191,7 @@ export default function AllExercises() {
                   </p>
                 </div>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>
