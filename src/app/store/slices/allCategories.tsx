@@ -44,13 +44,12 @@ export const categoriesSlice = createSlice({
   name: "categories",
   initialState,
   reducers: {
+    // Sets filters with what filter is selected
     setMuscleFilter: (state, action) => {
       state.filters.muscle = action.payload;
-      console.log("muscle filter:", action.payload);
     },
     setEquipmentFilter: (state, action) => {
       state.filters.equipment = action.payload;
-      console.log("equipment filter:", action.payload);
     },
   },
 

@@ -6,14 +6,8 @@ export type Exercise = {
   gifUrl: string;
 };
 
-export type Params = {
-  offset: number;
-};
-
-export type CategoryFilter = {
-  offset: number;
-  muscleCategory: string;
-  equipmentCategory: string;
+export type Exercises = {
+  exercise: Exercise;
 };
 
 export type MuscleCategory = {
