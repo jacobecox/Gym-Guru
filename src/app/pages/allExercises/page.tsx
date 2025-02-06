@@ -97,7 +97,7 @@ export default function AllExercises() {
         </button>
 
         {/* Title */}
-        <h1 className="text-7xl text-black dark:text-white font-extrabold text-center p-6 ">
+        <h1 className="text-7xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent font-extrabold text-center p-6 ">
           Explore Exercises
         </h1>
 
@@ -111,7 +111,7 @@ export default function AllExercises() {
           <select
             value={filters.muscle}
             onChange={(e) => dispatch(setMuscleFilter(e.target.value))}
-            className="w-full md:w-1/2 p-2 rounded-lg text-black bg-yellow-400 font-bold text-center text-2xl"
+            className="w-full md:w-1/2 p-2 rounded-lg text-black bg-gray-200 font-bold text-center text-2xl"
           >
             <option value="" disabled hidden>
               Filter by Muscle
@@ -131,7 +131,7 @@ export default function AllExercises() {
           <select
             value={filters.equipment}
             onChange={(e) => dispatch(setEquipmentFilter(e.target.value))}
-            className="w-full md:w-1/2 p-2 rounded-lg text-black bg-yellow-400 font-bold text-center text-2xl"
+            className="w-full md:w-1/2 p-2 rounded-lg text-black bg-gray-200 font-bold text-center text-2xl"
           >
             <option value="" disabled hidden>
               Filter by Equipment
@@ -154,7 +154,7 @@ export default function AllExercises() {
 
       {/* Handle no exercises */}
       {exercises.length < 1 ? (
-        <p className="text-black font-extrabold text-4xl text-center">
+        <p className="text-black dark:text-white font-extrabold text-4xl text-center">
           No exercises found
         </p>
       ) : null}

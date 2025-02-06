@@ -35,10 +35,10 @@ export default function App() {
             Login
           </button>
         </div>
-        <h1 className="text-center font-extrabold text-8xl pt-10 dark:text-white">
+        <h1 className="text-center font-extrabold text-8xl pt-10  tracking-wider bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent">
           GYM GURU
         </h1>
-        <p className="text-center font-bold text-xl p-2 text-yellow-400">
+        <p className="text-center font-bold text-xl p-2 text-black dark:text-white tracking-wide">
           Your ultimate gym trainer
         </p>
         <div className="flex items-center justify-center p-4">
