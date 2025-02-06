@@ -4,6 +4,7 @@ export type Exercise = {
   equipment: string;
   target: string;
   gifUrl: string;
+  instructions: string[];
 };
 
 export type Exercises = {

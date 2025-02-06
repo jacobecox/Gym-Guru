@@ -111,7 +111,7 @@ export default function AllExercises() {
           <select
             value={filters.muscle}
             onChange={(e) => dispatch(setMuscleFilter(e.target.value))}
-            className="w-full md:w-1/2 p-2 rounded-lg text-black bg-gray-200 font-bold text-center text-2xl"
+            className="w-full md:w-1/2 p-2 rounded-lg text-black dark:bg-gray-300 bg-yellow-400 font-bold text-center text-2xl"
           >
             <option value="" disabled hidden>
               Filter by Muscle
@@ -131,7 +131,7 @@ export default function AllExercises() {
           <select
             value={filters.equipment}
             onChange={(e) => dispatch(setEquipmentFilter(e.target.value))}
-            className="w-full md:w-1/2 p-2 rounded-lg text-black bg-gray-200 font-bold text-center text-2xl"
+            className="w-full md:w-1/2 p-2 rounded-lg text-black dark:bg-gray-300 bg-yellow-400 font-bold text-center text-2xl"
           >
             <option value="" disabled hidden>
               Filter by Equipment
