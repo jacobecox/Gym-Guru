@@ -1,5 +1,6 @@
 "use client";
 import DarkModeToggle from "@/app/components/darkModeToggle";
+import HomeButton from "@/app/components/homeButton";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/app/store/store";
@@ -86,7 +87,11 @@ export default function AllExercises() {
 
   return (
     <div className="bg-white dark:bg-black">
-      <DarkModeToggle />
+      <div className="flex justify-between">
+        <DarkModeToggle />
+        <HomeButton />
+      </div>
+
       <div className="p-4">
         {/* Back button */}
         <button
@@ -102,7 +107,7 @@ export default function AllExercises() {
         </h1>
 
         {/* Display pages, total pages, total exercises */}
-        <p className="text-gray-300 text-lg p-4">
+        <p className="text-gray-300 text-lg p-4 text-center sm:text-start">
           Showing page {currentPage} out of {totalPages} ({totalExercises}{" "}
           exercises)
         </p>
@@ -168,25 +173,25 @@ export default function AllExercises() {
               onClick={() => {
                 handleClick(exercise.exercise.id);
               }}
-              className="dark:bg-gray-900 bg-gray-400 rounded-lg p-6 m-2"
+              className="bg-gray-900 hover:bg-gray-800 rounded-lg p-6 m-2"
             >
-              <h1 className=" font-extrabold text-5xl text-center tracking-wide text-black dark:text-yellow-400 uppercase">
+              <h1 className=" font-extrabold text-5xl text-center tracking-wide text-yellow-400 uppercase">
                 {exercise.exercise.name}
               </h1>
-              <div className="flex xl:flex-col-3 justify-between m-4 items-center">
-                <div className="dark:bg-black bg-gray-200  rounded-lg px-6 py-2">
+              <div className="flex flex-col flex-wrap sm:flex-row justify-between m-4 items-center">
+                <div className="dark:bg-black bg-gray-200 rounded-lg m-1 px-4 py-2 w-60 sm:w-full">
                   <h1 className="text-yellow-600 text-xl text-center">
                     Muscle:
                   </h1>
-                  <p className="text-yellow-400 text-3xl font-bold text-center">
+                  <p className="dark:text-yellow-400 text-black text-3xl font-bold text-center uppercase">
                     {exercise.exercise.target}
                   </p>
                 </div>
-                <div className="dark:bg-black bg-gray-200 rounded-lg px-6 py-2 m-4">
+                <div className="dark:bg-black bg-gray-200 rounded-lg m-1 px-4 py-2 w-60 sm:w-full">
                   <h1 className="text-yellow-600 text-xl text-center">
                     Equipment:
                   </h1>
-                  <p className="text-yellow-400 text-3xl font-bold text-center">
+                  <p className="dark:text-yellow-400 text-black text-3xl font-bold text-center uppercase">
                     {exercise.exercise.equipment}
                   </p>
                 </div>
@@ -213,7 +218,7 @@ export default function AllExercises() {
             currentPage < totalPages && handlePageChange(currentPage + 1)
           }
           disabled={currentPage === totalPages}
-          className="px-3 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50"
+          className="px-3 py-2 rounded bg-gray-300 text-gray-700 hover:bg-gray-200 disabled:opacity-50"
         >
           Next &#8594;
         </button>

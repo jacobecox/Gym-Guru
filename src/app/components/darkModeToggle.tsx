@@ -19,8 +19,8 @@ export default function DarkModeToggle() {
   };
 
   return (
-    <div className="flex justify-start items-center p-6">
-      <p className="text-black dark:text-white font-bold p-1">Mode</p>
+    <div className="flex justify-start items-center p-4">
+      <p className="text-black dark:text-white font-bold p-2">Mode</p>
       <div
         className="relative w-16 h-8 bg-black dark:bg-yellow-400 rounded-full cursor-pointer flex items-center"
         onClick={toggleTheme}
