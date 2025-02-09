@@ -31,7 +31,8 @@
     "routes/getAPICategories.js",
     "models/muscleCategory.js",
     "routes/getAPIAllExercises.js",
-    "src/app/store/slices/authenticate.js"
+    "src/app/store/slices/authenticate.tsx",
+    "src/app/components/authForm.tsx"
   ],
   "exclude": ["node_modules"]
 }

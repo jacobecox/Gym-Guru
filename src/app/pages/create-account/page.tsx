@@ -1,5 +1,6 @@
 import HomeButton from "@/app/components/homeButton";
 import DarkModeToggle from "@/app/components/darkModeToggle";
+import { AuthForm } from "@/app/components/authForm";
 
 export default function CreateAccount() {
   return (
@@ -8,7 +9,7 @@ export default function CreateAccount() {
         <DarkModeToggle />
         <HomeButton />
       </div>
-      <p className="text-white text-center p-8">Create Account Here</p>
+      <AuthForm type="createAccount" />;
     </div>
   );
 }
