@@ -1,9 +1,9 @@
 import passport from "passport";
-import User from "../models/user";
+import User from "../models/user.js";
 import { ExtractJwt } from "passport-jwt";
 import { Strategy } from "passport-jwt";
 import LocalStrategy from "passport-local";
-import keys from "../config/keys";
+import keys from "../config/keys.js";
 
 // Passport expects username field to be a username, we are specifying the username field to be an email
 const localOptions = { usernameField: 'email' };

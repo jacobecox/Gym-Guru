@@ -1,6 +1,6 @@
 import jwt from "jwt-simple";
-import User from "../models/user";
-import keys from "../config/keys";
+import User from "../models/user.js";
+import keys from "../config/keys.js";
 
 // Create token for user with user id, time given, and expiration date
 const userToken = (user) => {
@@ -55,3 +55,11 @@ export const createAccount = async (req, res, next) => {
     next(err)
   }
 };
+
+const Authentication = {
+  login,
+  currentUser,
+  createAccount,
+};
+
+export default Authentication

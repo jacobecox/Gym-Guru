@@ -5,8 +5,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import keys from './config/keys.js';
-import './services/passport';
+import './services/passport.js';
+
 // Routes
+import Authentication from "./controllers/authentication.js"
 import getAPICategories from './routes/getAPICategories.js'
 import getAllAPIExercises from './routes/getAPIAllExercises.js'
 import getCategories from './routes/getCategories.js'
@@ -26,7 +28,7 @@ app.use(passport.initialize());
 const port = process.env.PORT || 8000;
 
 const requireAuth = passport.authenticate('jwt', { session: false });
-const requireSignin = passport.authenticate('local', { session: false });
+const requireLogin = passport.authenticate('local', { session: false });
 
 mongoose
 	.connect(keys.MONGO_URI)
@@ -40,7 +42,13 @@ mongoose
 		console.log(`❌ DB Connection Error: ${err.message}`);
 	});
 
+// Non-login required routes
 app.use('/api', getAPICategories)
 app.use('/api', getAllAPIExercises)
 app.use(getCategories)
-app.use(getAllExercises)  
+app.use(getAllExercises)
+
+// login required routes
+app.post('/auth/login', requireLogin, Authentication.login);
+app.post('/auth/create-account', Authentication.createAccount);
+app.get('/auth/current-user', requireAuth, Authentication.currentUser);

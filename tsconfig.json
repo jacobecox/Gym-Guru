@@ -30,7 +30,8 @@
     "src/app/server.tsx",
     "routes/getAPICategories.js",
     "models/muscleCategory.js",
-    "routes/getAPIAllExercises.js"
+    "routes/getAPIAllExercises.js",
+    "src/app/store/slices/authenticate.js"
   ],
   "exclude": ["node_modules"]
 }
