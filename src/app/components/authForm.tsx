@@ -10,10 +10,19 @@ import * as Yup from "yup";
 import { login, createAccount } from "../store/slices/authenticate";
 
 const userSchema = Yup.object().shape({
+  login: Yup.string()
+    .required("Login is required") // Make sure it's not empty
+    .test("is-email-or-username", "Invalid email or username", (value) => {
+      // Check if the value is a valid email using regex
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      // Username should be at least 3 characters long, adjust as needed
+      return emailRegex.test(value) || value.length >= 3;
+    }),
   email: Yup.string().email().required(),
+  username: Yup.string().required(),
   password: Yup.string().required(),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .oneOf([Yup.ref("password"), undefined], "Passwords must match")
     .required("Confirm Password is required"),
 });
 
@@ -49,38 +58,79 @@ export const AuthForm = ({ type = "login" }) => {
         onSubmit={handleSubmit(handleFormSubmit)}
         className=" flex flex-col p-8 items-center justify-center"
       >
-        <div className="flex flex-col items-center justify-center p-4">
-          <p className="text-2xl m-2 text-black dark:text-yellow-400">Email</p>
-          <input
-            className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
-            {...register("email", { required: true })}
-          ></input>
-          <p className="text-red-500">{errors.email?.message}</p>
-        </div>
+        {type === "createAccount" ? (
+          // For creating an account
+          <>
+            <div className="flex flex-col items-center justify-center p-4">
+              <p className="text-2xl m-2 text-black dark:text-yellow-400">
+                Email
+              </p>
+              <input
+                className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
+                {...register("email", { required: true })}
+              ></input>
+              <p className="text-red-500">{errors.email?.message}</p>
+            </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <p className="text-2xl m-2 dark:text-yellow-400 text-black">
-            Password
-          </p>
-          <input
-            className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
-            {...register("password", { required: true })}
-          ></input>
-          <p className="text-red-500">{errors.password?.message}</p>
-        </div>
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-2xl m-2 dark:text-yellow-400 text-black">
+                Username
+              </p>
+              <input
+                className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
+                {...register("username", { required: true })}
+              ></input>
+              <p className="text-red-500">{errors.username?.message}</p>
+            </div>
 
-        {type === "createAccount" && (
-          <div className="flex flex-col items-center justify-center p-4">
-            <p className="text-2xl m-2 dark:text-yellow-400 text-black">
-              Confirm Password
-            </p>
-            <input
-              className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
-              type="password"
-              {...register("confirmPassword")}
-            />
-            <p className="text-red-500">{errors.confirmPassword?.message}</p>
-          </div>
+            <div className="flex flex-col items-center justify-center p-4">
+              <p className="text-2xl m-2 text-black dark:text-yellow-400">
+                Password
+              </p>
+              <input
+                className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
+                {...register("password", { required: true })}
+              ></input>
+              <p className="text-red-500">{errors.password?.message}</p>
+            </div>
+
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-2xl m-2 dark:text-yellow-400 text-black">
+                Confirm Password
+              </p>
+              <input
+                className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
+                type="password"
+                {...register("confirmPassword")}
+              />
+              <p className="text-red-500">{errors.confirmPassword?.message}</p>
+            </div>
+          </>
+        ) : (
+          // For logging in
+          <>
+            <div className="flex flex-col items-center justify-center p-4">
+              <p className="text-2xl m-2 text-black dark:text-yellow-400">
+                Username / Email
+              </p>
+              <input
+                className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
+                {...register("login", { required: true })}
+              ></input>
+              <p className="text-red-500">{errors.login?.message}</p>
+            </div>
+
+            <div className="flex flex-col items-center justify-center p-4">
+              <p className="text-2xl m-2 text-black dark:text-yellow-400">
+                Password
+              </p>
+              <input
+                className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
+                {...register("password", { required: true })}
+              ></input>
+              <p className="text-red-500">{errors.password?.message}</p>
+            </div>
+          </>
         )}
 
         {error && <p className="text-red-500">{error}</p>}

@@ -17,13 +17,17 @@ const userToken = (user) => {
 
 // When user logs in, they receive back the user's email and token to make authenticated requests
 export const login = (req, res) => {
-  res.send({ email: req.user.email, token:userToken(req.user) })
+  if (!req.user) {
+    return res.status(401).json({ error: "Authentication failed" });
+  }
+  res.send({ email: req.user.email, username: req.user.username, token:userToken(req.user) })
 }
 
 // Function to create a user which has current user's email and token
 export const currentUser = (req,res) => {
   const user = {
     email: req.user.email,
+    username: req.user.username,
     token: userToken(req.user),
   };
   res.send(user);
@@ -31,21 +35,24 @@ export const currentUser = (req,res) => {
 
 // Function to create a new account
 export const createAccount = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, username, password } = req.body;
 
-// Email and password are required
-  if(!email || !password) {
-    return res.status(422).send({ error: 'You must provide email and password'})
+// Email, username and password are required
+  if(!email || !username || !password) {
+    return res.status(422).send({ error: 'You must provide and email, username and password'})
   }
   // mongoose will search for existing user matching that email first
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({
+      $or: [{ email: email }, { username: username }],
+    });
     if (existingUser) {
-      return res.status(422).send({error: 'Email is already in use'})
+      return res.status(422).send({error: 'Email or username is already in use'})
     }
 // If email isn't in use a new user is created with inputted email and password
     const user = new User();
     user.email = email;
+    user.username = username;
     user.setPassword(password);
 
     await user.save()

@@ -6,6 +6,7 @@ const Schema = mongoose.Schema
 // Define our model
 const UserSchema = new Schema({
 	email: { type: String, unique: true, lowercase: true },
+	username: { type: String, unique: true },
 	hash: String,
 	salt: String,
 });

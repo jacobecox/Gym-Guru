@@ -49,6 +49,6 @@ app.use(getCategories)
 app.use(getAllExercises)
 
 // login required routes
-app.post('/auth/login', requireLogin, Authentication.login);
+app.post('/auth/login', requireLogin,  Authentication.login);
 app.post('/auth/create-account', Authentication.createAccount);
 app.get('/auth/current-user', requireAuth, Authentication.currentUser);
