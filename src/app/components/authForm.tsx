@@ -9,24 +9,49 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { login, createAccount } from "../store/slices/authenticate";
 
-const userSchema = Yup.object().shape({
-  login: Yup.string()
-    .required("Login is required") // Make sure it's not empty
-    .test("is-email-or-username", "Invalid email or username", (value) => {
-      // Check if the value is a valid email using regex
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      // Username should be at least 3 characters long, adjust as needed
-      return emailRegex.test(value) || value.length >= 3;
-    }),
-  email: Yup.string().email().required(),
-  username: Yup.string().required(),
-  password: Yup.string().required(),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), undefined], "Passwords must match")
-    .required("Confirm Password is required"),
-});
+type AuthFormProps = {
+  type: "login" | "createAccount";
+};
 
-export const AuthForm = ({ type = "login" }) => {
+const userSchema = (type: "login" | "createAccount") =>
+  Yup.object().shape({
+    login:
+      type === "login"
+        ? Yup.string()
+            .required("Login is required")
+            .test(
+              "is-email-or-username",
+              "Invalid email or username",
+              (value) => {
+                // Check if the value is a valid email using regex
+                const emailRegex =
+                  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                // Username should be at least 3 characters long, adjust as needed
+                return emailRegex.test(value) || value.length >= 3;
+              }
+            )
+        : Yup.mixed().notRequired(),
+    email:
+      type === "createAccount"
+        ? Yup.string().email("Invalid email").required("Email is required")
+        : Yup.mixed().notRequired(),
+
+    username:
+      type === "createAccount"
+        ? Yup.string().required("Username is required")
+        : Yup.mixed().notRequired(),
+
+    password: Yup.string().required("Password is required"),
+
+    confirmPassword:
+      type === "createAccount"
+        ? Yup.string()
+            .oneOf([Yup.ref("password"), undefined], "Passwords must match")
+            .required("Confirm Password is required")
+        : Yup.mixed().notRequired(),
+  });
+
+export const AuthForm = ({ type = "login" }: AuthFormProps) => {
   const router = useRouter();
   const error = useSelector((state: RootState) => state.authenticate.error);
 
@@ -35,7 +60,7 @@ export const AuthForm = ({ type = "login" }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(userSchema),
+    resolver: yupResolver(userSchema(type) as Yup.ObjectSchema<any>),
   });
 
   const dispatch = useDispatch();
@@ -69,7 +94,9 @@ export const AuthForm = ({ type = "login" }) => {
                 className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
                 {...register("email", { required: true })}
               ></input>
-              <p className="text-red-500">{errors.email?.message}</p>
+              <p className="text-red-500">
+                {errors.email?.message?.toString()}
+              </p>
             </div>
 
             <div className="flex flex-col items-center justify-center">
@@ -80,7 +107,9 @@ export const AuthForm = ({ type = "login" }) => {
                 className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
                 {...register("username", { required: true })}
               ></input>
-              <p className="text-red-500">{errors.username?.message}</p>
+              <p className="text-red-500">
+                {errors.username?.message?.toString()}
+              </p>
             </div>
 
             <div className="flex flex-col items-center justify-center p-4">
@@ -91,7 +120,9 @@ export const AuthForm = ({ type = "login" }) => {
                 className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
                 {...register("password", { required: true })}
               ></input>
-              <p className="text-red-500">{errors.password?.message}</p>
+              <p className="text-red-500">
+                {errors.password?.message?.toString()}
+              </p>
             </div>
 
             <div className="flex flex-col items-center justify-center">
@@ -103,7 +134,9 @@ export const AuthForm = ({ type = "login" }) => {
                 type="password"
                 {...register("confirmPassword")}
               />
-              <p className="text-red-500">{errors.confirmPassword?.message}</p>
+              <p className="text-red-500">
+                {errors.confirmPassword?.message?.toString()}
+              </p>
             </div>
           </>
         ) : (
@@ -117,7 +150,9 @@ export const AuthForm = ({ type = "login" }) => {
                 className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
                 {...register("login", { required: true })}
               ></input>
-              <p className="text-red-500">{errors.login?.message}</p>
+              <p className="text-red-500">
+                {errors.login?.message?.toString()}
+              </p>
             </div>
 
             <div className="flex flex-col items-center justify-center p-4">
@@ -128,7 +163,9 @@ export const AuthForm = ({ type = "login" }) => {
                 className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
                 {...register("password", { required: true })}
               ></input>
-              <p className="text-red-500">{errors.password?.message}</p>
+              <p className="text-red-500">
+                {errors.password?.message?.toString()}
+              </p>
             </div>
           </>
         )}

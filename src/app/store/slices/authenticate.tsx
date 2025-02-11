@@ -44,10 +44,7 @@ export const login = createAsyncThunk(
     } catch (err: any) {
       if (err.response) {
         if (err.response.status === 401) {
-          return rejectWithValue("Incorrect email or password");
-        }
-        if (err.response.status === 422) {
-          return rejectWithValue("Email is already in use");
+          return rejectWithValue("Incorrect email/username or password");
         }
       }
       return rejectWithValue("Something went wrong. Please try again.");
@@ -82,6 +79,7 @@ const authSlice = createSlice({
     authenticated: !isServer ? localStorage.getItem("token") : "",
     error: "",
     email: null,
+    username: null,
   },
   reducers: {
     // Reducer route to log out user
@@ -91,6 +89,7 @@ const authSlice = createSlice({
       }
       state.authenticated = "";
       state.email = null;
+      state.username = null;
     },
   },
   extraReducers: (builder) => {
@@ -98,6 +97,7 @@ const authSlice = createSlice({
       .addCase(createAccount.fulfilled, (state, action) => {
         state.authenticated = action.payload.token;
         state.email = action.payload.email || null;
+        state.username = action.payload.username || null;
         console.log("account created successfully ", action.payload);
       })
       .addCase(createAccount.rejected, (state, action) => {
@@ -107,6 +107,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.authenticated = action.payload.token;
         state.email = action.payload.email || null;
+        state.username = action.payload.username || null;
         console.log("use logged in successfully ", action.payload);
       })
       .addCase(login.rejected, (state, action) => {
@@ -116,6 +117,7 @@ const authSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.authenticated = action.payload.token;
         state.email = action.payload.email || null;
+        state.username = action.payload.username || null;
       });
   },
 });
