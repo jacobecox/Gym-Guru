@@ -19,34 +19,10 @@ export default function App() {
     router.push("/pages/workout-plan");
   };
 
-  const login = () => {
-    router.push("/pages/login");
-  };
-
-  const createAccount = () => {
-    router.push("/pages/create-account");
-  };
-
   return (
     <main className="bg-white dark:bg-black p-10">
       <div>
-        <div className="flex justify-between items-center p-6 absolute top-0 left-0 right-0 ">
-          <NavBar />
-          <button
-            onClick={login}
-            className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
-          >
-            Login
-          </button>
-        </div>
-        <div className="flex justify-end items-center pt-2 px-6 absolute top-20 left-0 right-0">
-          <button
-            onClick={createAccount}
-            className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
-          >
-            Create Account
-          </button>
-        </div>
+        <NavBar />
         <h1 className="text-center font-extrabold text-8xl sm:pt-10 pt-20  tracking-wider bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent">
           GYM GURU
         </h1>

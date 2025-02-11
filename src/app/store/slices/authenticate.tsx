@@ -56,9 +56,15 @@ export const login = createAsyncThunk(
 export const fetchUser = createAsyncThunk(
   "auth/fetchUser",
   async (_, { rejectWithValue }) => {
+    const token = window.localStorage.getItem("token");
+
+    if (!token) {
+      return rejectWithValue("No token found");
+    }
+
     const config = {
       headers: {
-        Authorization: "Bearer " + window.localStorage.getItem("token"),
+        Authorization: `Bearer ${token}`,
       },
     };
     try {
@@ -67,8 +73,10 @@ export const fetchUser = createAsyncThunk(
         localStorage.removeItem("token");
       }
       return response.data;
-    } catch (err) {
-      return rejectWithValue(err);
+    } catch (err: any) {
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to fetch user"
+      );
     }
   }
 );
@@ -98,21 +106,17 @@ const authSlice = createSlice({
         state.authenticated = action.payload.token;
         state.email = action.payload.email || null;
         state.username = action.payload.username || null;
-        console.log("account created successfully ", action.payload);
       })
       .addCase(createAccount.rejected, (state, action) => {
         state.error = action.payload as string;
-        console.log("error creating account:", action.payload);
       })
       .addCase(login.fulfilled, (state, action) => {
         state.authenticated = action.payload.token;
         state.email = action.payload.email || null;
         state.username = action.payload.username || null;
-        console.log("use logged in successfully ", action.payload);
       })
       .addCase(login.rejected, (state, action) => {
         state.error = action.payload as string;
-        console.log("error logging in:", action.payload);
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.authenticated = action.payload.token;
