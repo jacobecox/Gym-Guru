@@ -5,8 +5,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/store/store";
 import { fetchExerciseDetail } from "@/app/store/slices/exerciseDetail";
-import DarkModeToggle from "@/app/components/darkModeToggle";
-import HomeButton from "@/app/components/homeButton";
+import NavBar from "@/app/components/navBar";
 import LoadingSpinner from "@/app/components/loadingSpinner";
 
 export default function ExerciseDetail() {
@@ -42,10 +41,7 @@ export default function ExerciseDetail() {
 
   return (
     <div>
-      <div className="flex justify-between">
-        <DarkModeToggle />
-        <HomeButton />
-      </div>
+      <NavBar />
       <div className="p-4">
         {/* Back button */}
         <button

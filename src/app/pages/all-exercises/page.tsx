@@ -1,6 +1,5 @@
 "use client";
-import DarkModeToggle from "@/app/components/darkModeToggle";
-import HomeButton from "@/app/components/homeButton";
+import NavBar from "@/app/components/navBar";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/app/store/store";
@@ -87,10 +86,7 @@ export default function AllExercises() {
 
   return (
     <div className="bg-white dark:bg-black">
-      <div className="flex justify-between">
-        <DarkModeToggle />
-        <HomeButton />
-      </div>
+      <NavBar />
 
       <div className="p-4">
         {/* Back button */}

@@ -1,13 +1,9 @@
-import HomeButton from "@/app/components/homeButton";
-import DarkModeToggle from "@/app/components/darkModeToggle";
+import NavBar from "@/app/components/navBar";
 
 export default function SavedExercises() {
   return (
     <div>
-      <div className="flex justify-between">
-        <DarkModeToggle />
-        <HomeButton />
-      </div>
+      <NavBar />
       <p className="text-white text-center p-8">Saved Exercises Here</p>
     </div>
   );

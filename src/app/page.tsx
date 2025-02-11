@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import DarkModeToggle from "./components/darkModeToggle";
+import NavBar from "./components/navBar";
 import { useRouter } from "next/navigation";
 
 export default function App() {
@@ -31,7 +31,7 @@ export default function App() {
     <main className="bg-white dark:bg-black p-10">
       <div>
         <div className="flex justify-between items-center p-6 absolute top-0 left-0 right-0 ">
-          <DarkModeToggle />
+          <NavBar />
           <button
             onClick={login}
             className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
