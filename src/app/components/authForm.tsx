@@ -76,7 +76,7 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
 
   return (
     <div className="h-screen">
-      <div className="text-center font-extrabold text-7xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent p-6">
+      <div className="text-center font-extrabold md:text-7xl text-5xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent md:p-6 md:mt-10  pt-20">
         {type === "login" ? <h1>Login</h1> : <h1>Create Account</h1>}
       </div>
       <form

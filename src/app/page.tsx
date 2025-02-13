@@ -20,10 +20,10 @@ export default function App() {
   };
 
   return (
-    <main className="bg-white dark:bg-black p-10">
-      <div>
-        <NavBar />
-        <h1 className="text-center font-extrabold text-8xl sm:pt-10 pt-20  tracking-wider bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent">
+    <main className="bg-white dark:bg-black">
+      <NavBar />
+      <div className="px-10">
+        <h1 className="text-center font-extrabold text-8xl pt-28    tracking-wider bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent">
           GYM GURU
         </h1>
         <p className="text-center font-bold text-xl p-2 text-black dark:text-white tracking-wide">

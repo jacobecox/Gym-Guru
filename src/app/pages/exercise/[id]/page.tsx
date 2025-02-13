@@ -14,7 +14,7 @@ export default function ExerciseDetail() {
   const { id } = useParams();
 
   const handleBack = () => {
-    router.push("/pages/allExercises");
+    router.push("/pages/all-exercises");
   };
 
   const exerciseDetail = useSelector(

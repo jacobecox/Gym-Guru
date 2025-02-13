@@ -43,15 +43,15 @@ export default function NavBar() {
     }
   }, [authenticated, username, dispatch]);
 
-  const login = () => {
+  const handleLogin = () => {
     router.push("/pages/login");
   };
 
-  const createAccount = () => {
+  const handleCreateAccount = () => {
     router.push("/pages/create-account");
   };
 
-  const handleLogoutClick = () => {
+  const handleLogout = () => {
     dispatch(logout());
     router.push("/");
   };
@@ -59,13 +59,13 @@ export default function NavBar() {
   const renderLinks = () => {
     if (authenticated) {
       return (
-        <div className="flex justify-end items-center absolute top-5 right-10">
+        <div className="flex justify-end items-center fixed top-6 right-10">
           <h1 className="dark:text-yellow-400 text-black font-extrabold px-6">
             {username}
           </h1>
           <button
-            onClick={handleLogoutClick}
-            className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
+            onClick={handleLogout}
+            className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
           >
             Logout
           </button>
@@ -77,18 +77,18 @@ export default function NavBar() {
     ) {
       return (
         <>
-          <div className="flex justify-end pt-2 px-6 absolute top-5 left-0 right-0">
+          <div className="flex justify-end items-center pt-2 px-6 fixed top-5 left-0 right-0 z-0">
             <button
-              onClick={login}
-              className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
+              onClick={handleLogin}
+              className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
             >
               Login
             </button>
           </div>
-          <div className="flex justify-end pt-2 px-6 absolute top-16 left-0 right-0">
+          <div className="flex justify-end items-center pt-2 px-6 fixed top-16 left-0 right-0">
             <button
-              onClick={createAccount}
-              className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
+              onClick={handleCreateAccount}
+              className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
             >
               Create Account
             </button>
@@ -100,10 +100,10 @@ export default function NavBar() {
 
   return (
     <div className="flex">
-      <div className="flex justify-start items-center absolute top-5 left-10">
+      <div className="flex items-center justify-start pt-5 px-2 z-10">
         {/* Dark mode toggle */}
         <p className="text-black dark:text-white font-bold px-2">Mode</p>
-        <div
+        <button
           className="relative w-16 h-8 bg-black dark:bg-yellow-400 rounded-full cursor-pointer flex items-center"
           onClick={toggleTheme}
         >
@@ -112,15 +112,15 @@ export default function NavBar() {
               theme === "dark" ? "translate-x-8" : "translate-x-1"
             }`}
           />
-        </div>
+        </button>
       </div>
       <div>{renderLinks()}</div>
       {/* Home Button */}
       {pathName !== "/" && ( // Not displayed on home page
-        <div className="flex justify-start items-center absolute top-5 left-52">
+        <div className="flex justify-normal items-center pt-5">
           <button
             onClick={handleClick}
-            className="font-extrabold text-xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent flex justify-start"
+            className="font-extrabold text-xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent flex justify-start z-10"
           >
             GYM GURU
           </button>
