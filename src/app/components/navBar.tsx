@@ -6,9 +6,9 @@ import { RootState, AppDispatch } from "../store/store";
 import { fetchUser, logout } from "../store/slices/authenticate";
 
 export default function NavBar() {
+  // Dark Mode Settings
   const [theme, setTheme] = useState("light");
 
-  // Listens to change in theme state (above)
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light"; // Grabs current theme in local storage else uses light theme
     setTheme(savedTheme); // Sets state to that theme
@@ -30,6 +30,7 @@ export default function NavBar() {
   };
 
   const dispatch = useDispatch<AppDispatch>();
+  const token = window.localStorage.getItem("token");
   const authenticated = useSelector(
     (state: RootState) => state.authenticate.authenticated
   );
@@ -37,11 +38,12 @@ export default function NavBar() {
     (state: RootState) => state.authenticate.username
   );
 
+  // If user is authenticated then calls for user info
   useEffect(() => {
-    if (authenticated) {
+    if (authenticated && token) {
       dispatch(fetchUser());
     }
-  }, [authenticated, username, dispatch]);
+  }, [authenticated, token, username, dispatch]);
 
   const handleLogin = () => {
     router.push("/pages/login");
@@ -53,13 +55,12 @@ export default function NavBar() {
 
   const handleLogout = () => {
     dispatch(logout());
-    router.push("/");
   };
 
   const renderLinks = () => {
     if (authenticated) {
       return (
-        <div className="flex justify-end items-center fixed top-6 right-10">
+        <div className="flex justify-end items-center absolute top-6 right-10">
           <h1 className="dark:text-yellow-400 text-black font-extrabold px-6">
             {username}
           </h1>
@@ -77,7 +78,7 @@ export default function NavBar() {
     ) {
       return (
         <>
-          <div className="flex justify-end items-center pt-2 px-6 fixed top-5 left-0 right-0 z-0">
+          <div className="flex justify-end items-center pt-2 px-6 absolute top-5 left-0 right-0 z-0">
             <button
               onClick={handleLogin}
               className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
@@ -85,7 +86,7 @@ export default function NavBar() {
               Login
             </button>
           </div>
-          <div className="flex justify-end items-center pt-2 px-6 fixed top-16 left-0 right-0">
+          <div className="flex justify-end items-center pt-2 px-6 absolute top-16 left-0 right-0">
             <button
               onClick={handleCreateAccount}
               className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
@@ -100,7 +101,7 @@ export default function NavBar() {
 
   return (
     <div className="flex">
-      <div className="flex items-center justify-start pt-5 px-2 z-10">
+      <div className="flex items-center justify-start pt-5 px-4 z-10">
         {/* Dark mode toggle */}
         <p className="text-black dark:text-white font-bold px-2">Mode</p>
         <button

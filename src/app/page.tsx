@@ -40,8 +40,7 @@ export default function App() {
         <div className="flex flex-col xl:flex-row justify-center py-2 items-center">
           <div className="text-center text-xl dark:text-white w-screen sm:p-10 px-4">
             <p className="font-bold text-5xl my-2 text-black dark:text-white">
-              Gym Guru is here to create a simplified exercise discovery
-              process.
+              Gym Guru creates a simplified exercise discovery process.
             </p>
             <p className="py-2 text-yellow-600 text-xl sm:mx-10">
               Rather than experimenting in the gym and searching the web to find
@@ -51,7 +50,7 @@ export default function App() {
             </p>
             <p className="py-2 text-yellow-600 text-xl sm:mx-10">
               As you become comfortable and gain confidence in exercises, you
-              can create a workout plan tailored to your favorite exercises.
+              can create a workout plan tailored with your favorite exercises.
             </p>
           </div>
           <div className="flex flex-col space-y-4 items-stretch justify-center max-w-lg mx-auto w-full py-4">

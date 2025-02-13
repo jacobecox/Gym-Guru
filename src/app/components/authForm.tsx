@@ -91,6 +91,7 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
                 Email
               </p>
               <input
+                type="email"
                 className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
                 {...register("email", { required: true })}
               ></input>
@@ -117,6 +118,7 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
                 Password
               </p>
               <input
+                type="password"
                 className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
                 {...register("password", { required: true })}
               ></input>
@@ -160,6 +162,7 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
                 Password
               </p>
               <input
+                type="password"
                 className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
                 {...register("password", { required: true })}
               ></input>

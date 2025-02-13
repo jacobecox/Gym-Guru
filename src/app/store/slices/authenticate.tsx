@@ -15,15 +15,22 @@ export const createAccount = createAsyncThunk(
         formProps
       );
 
+      const token = response.data.token;
+
       // Verifying we are requesting on server and not window using Next.js
       if (!isServer) {
         localStorage.removeItem("token");
       }
+
+      if (token) {
+        localStorage.setItem("token", token);
+      }
+
       return response.data;
     } catch (err: any) {
       if (err.response) {
         if (err.response.status === 422) {
-          return rejectWithValue("Email is already in use");
+          return rejectWithValue("Email or username is already in use");
         }
       }
       return rejectWithValue("Something went wrong. Please try again.");
@@ -119,9 +126,13 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
+        state.error = "";
         state.authenticated = action.payload.token;
         state.email = action.payload.email || null;
         state.username = action.payload.username || null;
+      })
+      .addCase(fetchUser.rejected, (state, action) => {
+        state.error = action.payload as string;
       });
   },
 });
