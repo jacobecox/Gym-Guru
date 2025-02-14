@@ -65,6 +65,10 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
 
   const dispatch = useDispatch();
 
+  const handleGoogleClick = () => {
+    router.push("localhost:8000/auth/google/callback");
+  };
+
   const handleFormSubmit = async (data: any) => {
     const action: any = type === "login" ? login : createAccount;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -172,6 +176,13 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
             </div>
           </>
         )}
+
+        {/* Google login option */}
+        <div>
+          <button onClick={handleGoogleClick} className="bg-white">
+            Continue with Google
+          </button>
+        </div>
 
         {error && <p className="text-red-500">{error}</p>}
 

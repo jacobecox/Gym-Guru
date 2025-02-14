@@ -2,7 +2,53 @@ import passport from "passport";
 import User from "../models/user.js";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import LocalStrategy from "passport-local";
+import GoogleStrategy from 'passport-google-oauth20';
+import dotenv from 'dotenv';
 import keys from "../config/keys.js";
+
+dotenv.config();
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id, function (err, user) {
+    done(null, user);
+  });
+});
+
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: `${process.env.NEXT_PUBLIC_CLIENT_ID}`,
+      clientSecret: `${process.env.NEXT_PUBLIC_CLIENT_SECRET}`,
+      callbackURL: "/auth/google/callback",
+    },
+    (profile, done) => {
+      User.findOne({ googleId: profile.id }).then((existingUser) => {
+        if (existingUser) {
+          // we already have a record with the given profile ID
+          done(null, existingUser);
+        } else {
+          // we don't have a user record with this ID, make a new record!
+          new User({
+            googleId: profile.id,
+            username: profile.displayName,
+            email: profile.emails[0].value,
+          })
+            .save()
+            .then((user) => done(null, user));
+        }
+      });
+    }
+  )
+);
+
+export const googleAuth = passport.authenticate("google", {
+  scope: ["profile", "email"],
+});
 
 // Passport expects username field to be a username, we are specifying the username field to be either email or username
 const localOptions = { usernameField: 'login' };
