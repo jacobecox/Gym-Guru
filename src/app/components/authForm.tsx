@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { login, createAccount } from "../store/slices/authenticate";
+import GoogleAuthForm from "./googleAuthForm";
 
 type AuthFormProps = {
   type: "login" | "createAccount";
@@ -64,10 +65,6 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
   });
 
   const dispatch = useDispatch();
-
-  const handleGoogleClick = () => {
-    router.push("localhost:8000/auth/google/callback");
-  };
 
   const handleFormSubmit = async (data: any) => {
     const action: any = type === "login" ? login : createAccount;
@@ -178,11 +175,6 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
         )}
 
         {/* Google login option */}
-        <div>
-          <button onClick={handleGoogleClick} className="bg-white">
-            Continue with Google
-          </button>
-        </div>
 
         {error && <p className="text-red-500">{error}</p>}
 
@@ -190,6 +182,10 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
           Submit
         </button>
       </form>
+
+      <div className="flex justify-center items-center">
+        <GoogleAuthForm />
+      </div>
     </div>
   );
 };

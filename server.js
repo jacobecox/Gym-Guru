@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import passport from 'passport';
 import keys from './config/keys.js';
 import cookieSession from 'cookie-session';
+import GoogleStrategy from 'passport-google-oauth20';
 import './services/passport.js';
 
 // Routes
@@ -14,18 +15,58 @@ import getAPICategories from './routes/getAPICategories.js'
 import getAllAPIExercises from './routes/getAPIAllExercises.js'
 import getCategories from './routes/getCategories.js'
 import getAllExercises from './routes/getAllExercises.js'
-import { googleAuth } from './services/passport.js';
 
 const app = express();  
+dotenv.config({ path: ".env.development.local" });
 
-dotenv.config();
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
 app.use(express.json());
-
 app.use(cors());
-
 app.use(passport.initialize());
 
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id, function (err, user) {
+    done(null, user);
+  });
+});
+
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: "/auth/google/callback",
+    },
+    (profile, done) => {
+      User.findOne({ googleId: profile.id }).then((existingUser) => {
+        if (existingUser) {
+          // we already have a record with the given profile ID
+          done(null, existingUser);
+        } else {
+          // we don't have a user record with this ID, make a new record!
+          new User({
+            googleId: profile.id,
+            username: profile.displayName,
+            email: profile.emails[0].value,
+          })
+            .save()
+            .then((user) => done(null, user));
+        }
+      });
+    }
+  )
+);
+
+const googleAuth = passport.authenticate("google", {
+  scope: ["profile", "email"],
+});
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -33,7 +74,7 @@ app.use(
   })
 );
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8080;
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 const requireLogin = passport.authenticate('local', { session: false });
@@ -43,7 +84,7 @@ mongoose
 	.then(() => {
 		console.log('🚀 DB Connected!');
 		app.listen(port, () => {
-			console.log('😎 Server listening on:', port);
+			console.log('😎 Server listening on PORT', port);
 		});
 	})
 	.catch((err) => {
