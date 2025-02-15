@@ -44,7 +44,6 @@ export const exerciseDetailSlice = createSlice({
     builder.addCase(fetchExerciseDetail.fulfilled, (state, action) => {
       state.loading = false;
       state.exerciseDetail = action.payload;
-      console.log("action payload:", action.payload);
     });
     builder.addCase(fetchExerciseDetail.rejected, (state, action) => {
       state.loading = false;

@@ -33,8 +33,10 @@ export default function AllExercises() {
     (state: RootState) => state.categories.equipmentCategories
   );
 
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchResults = async () => {
       // Listens for when page and muscle/equipment filters change and sends to api with updated params
       try {
         const params = new URLSearchParams({
@@ -43,9 +45,7 @@ export default function AllExercises() {
           equipment: filters.equipment,
         });
 
-        const res = await fetch(
-          `http://localhost:8000/all-exercises?${params}`
-        );
+        const res = await fetch(`${BASE_URL}/all-exercises?${params}`);
         const data = await res.json();
 
         setExercises(data.exercises);
@@ -60,8 +60,8 @@ export default function AllExercises() {
       }
     };
 
-    fetchProducts();
-  }, [filters.muscle, filters.equipment, currentPage]);
+    fetchResults();
+  }, [filters.muscle, filters.equipment, currentPage, BASE_URL]);
 
   const handlePageChange = (page: number) => {
     // Sets the current page to change to whatever page was selected

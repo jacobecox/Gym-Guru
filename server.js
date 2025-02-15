@@ -5,7 +5,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import keys from './config/keys.js';
-import cookieSession from 'cookie-session';
+import User from './models/user.js';
+import session from "express-session";
 import GoogleStrategy from 'passport-google-oauth20';
 import './services/passport.js';
 
@@ -23,8 +24,23 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+	origin: "http://localhost:3000",	
+	credentials: true,
+}));
+
+app.use(session({
+  secret: "helloworld",  // Change this to a secure secret
+  resave: false, 
+  saveUninitialized: false,
+  cookie: {
+    secure: false,  // Set to true if using HTTPS
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  },
+}));
+
 app.use(passport.initialize());
+app.use(passport.session());
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -44,35 +60,32 @@ passport.use(
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: "/auth/google/callback",
     },
-    (profile, done) => {
-      User.findOne({ googleId: profile.id }).then((existingUser) => {
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        const existingUser = await User.findOne({ googleId: profile.id });
+
         if (existingUser) {
-          // we already have a record with the given profile ID
-          done(null, existingUser);
-        } else {
-          // we don't have a user record with this ID, make a new record!
-          new User({
-            googleId: profile.id,
-            username: profile.displayName,
-            email: profile.emails[0].value,
-          })
-            .save()
-            .then((user) => done(null, user));
+          return done(null, existingUser);
         }
-      });
+				
+        const newUser = await new User({
+          googleId: profile.id,
+          username: profile.displayName,
+          email: profile.emails[0].value,
+        }).save();
+
+        return done(null, newUser);
+      } catch (err) {
+        return done(err, null);
+      }
     }
   )
 );
 
+
 const googleAuth = passport.authenticate("google", {
   scope: ["profile", "email"],
 });
-app.use(
-  cookieSession({
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    keys: ["helloworld"],
-  })
-);
 
 const port = process.env.PORT || 8080;
 
@@ -98,7 +111,7 @@ app.use(getCategories)
 app.use(getAllExercises)
 
 // Login required routes
-app.post('/auth/login', requireLogin,  Authentication.login);
+app.post('/auth/login', requireLogin, Authentication.login);
 app.post('/auth/create-account', Authentication.createAccount);
 app.get('/auth/current-user', requireAuth, Authentication.currentUser);
 
@@ -107,10 +120,3 @@ app.get("/auth/google", googleAuth);
 app.get("/auth/google/callback", googleAuth, (req, res) => {
   res.send("You are logged in via Google!");
 });
-// app.get("/api/current_user", (req, res) => {
-//   res.send(req.user);
-// });
-// app.get("/api/logout", (req, res) => {
-//   req.logout();
-//   res.send(req.user);
-// });

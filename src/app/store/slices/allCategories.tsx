@@ -5,19 +5,29 @@ import type {
   FilterCategory,
 } from "@/app/types";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 export const fetchMuscleCategories = createAsyncThunk(
   "muscleCategories, fetchMuscleCategories",
   async () => {
-    const response = await fetch("http://localhost:8000/muscle-categories");
-    return response.json();
+    try {
+      const response = await fetch(`${BASE_URL}/muscle-categories`);
+      return response.json();
+    } catch (err) {
+      console.error(err);
+    }
   }
 );
 
 export const fetchEquipmentCategories = createAsyncThunk(
   "equipmentCategories, fetchEquipmentCategories",
   async () => {
-    const response = await fetch("http://localhost:8000/equipment-categories");
-    return response.json();
+    try {
+      const response = await fetch(`${BASE_URL}/equipment-categories`);
+      return response.json();
+    } catch (err) {
+      console.error(err);
+    }
   }
 );
 
@@ -60,6 +70,7 @@ export const categoriesSlice = createSlice({
     builder.addCase(fetchMuscleCategories.fulfilled, (state, action) => {
       state.loading = false;
       state.muscleCategories = action.payload;
+      console.log("muscle category:", action.payload);
     });
     builder.addCase(fetchMuscleCategories.rejected, (state, action) => {
       state.loading = false;
@@ -71,6 +82,7 @@ export const categoriesSlice = createSlice({
     builder.addCase(fetchEquipmentCategories.fulfilled, (state, action) => {
       state.loading = false;
       state.equipmentCategories = action.payload;
+      console.log("equipment category:", action.payload);
     });
     builder.addCase(fetchEquipmentCategories.rejected, (state, action) => {
       state.error = action.error.message;

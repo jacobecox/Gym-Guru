@@ -30,7 +30,14 @@ export default function NavBar() {
   };
 
   const dispatch = useDispatch<AppDispatch>();
-  const token = window.localStorage.getItem("token");
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Runs only on the client
+    const storedToken = window.localStorage.getItem("token");
+    setToken(storedToken);
+  }, []);
+
   const authenticated = useSelector(
     (state: RootState) => state.authenticate.authenticated
   );

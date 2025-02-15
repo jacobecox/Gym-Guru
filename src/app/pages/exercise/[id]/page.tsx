@@ -21,8 +21,6 @@ export default function ExerciseDetail() {
     (state: RootState) => state.exerciseDetail.exerciseDetail
   );
 
-  console.log("exercise Detail:", exerciseDetail);
-
   const loading = useSelector(
     (state: RootState) => state.exerciseDetail.loading
   );
