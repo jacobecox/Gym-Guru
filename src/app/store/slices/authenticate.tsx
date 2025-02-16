@@ -63,22 +63,15 @@ export const login = createAsyncThunk(
 export const fetchUser = createAsyncThunk(
   "auth/fetchUser",
   async (_, { rejectWithValue }) => {
-    const token = window.localStorage.getItem("token");
-
-    if (!token) {
-      return rejectWithValue("No token found");
-    }
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
     try {
-      const response = await axios.get(`${BASE_URL}/auth/current-user`, config);
+      const response = await axios.get(`${BASE_URL}/auth/current-user`, {
+        withCredentials: true,
+      });
+      console.log("response:", response);
       if (!isServer) {
         localStorage.removeItem("token");
       }
+      localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (err: any) {
       return rejectWithValue(
@@ -130,6 +123,7 @@ const authSlice = createSlice({
         state.authenticated = action.payload.token;
         state.email = action.payload.email || null;
         state.username = action.payload.username || null;
+        console.log("fetched user:", action.payload);
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.error = action.payload as string;

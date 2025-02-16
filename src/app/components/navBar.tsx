@@ -30,6 +30,7 @@ export default function NavBar() {
   };
 
   const dispatch = useDispatch<AppDispatch>();
+
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
@@ -38,19 +39,17 @@ export default function NavBar() {
     setToken(storedToken);
   }, []);
 
-  const authenticated = useSelector(
-    (state: RootState) => state.authenticate.authenticated
-  );
-  const username = useSelector(
-    (state: RootState) => state.authenticate.username
+  const { authenticated, username } = useSelector(
+    (state: RootState) => state.authenticate
   );
 
   // If user is authenticated then calls for user info
   useEffect(() => {
     if (authenticated && token) {
+      console.log("fetching user");
       dispatch(fetchUser());
     }
-  }, [authenticated, token, username, dispatch]);
+  }, [authenticated, token, dispatch]);
 
   const handleLogin = () => {
     router.push("/pages/login");

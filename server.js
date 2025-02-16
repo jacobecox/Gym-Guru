@@ -22,19 +22,20 @@ dotenv.config({ path: ".env.development.local" });
 
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const BASE_URL = process.env.NEXT_PUBLIC_FRONT_BASE_URL;
 
 app.use(express.json());
 app.use(cors({
-	origin: "http://localhost:3000",	
+	origin: BASE_URL,	
 	credentials: true,
 }));
 
 app.use(session({
-  secret: "helloworld",  // Change this to a secure secret
+  secret: "passkeysecret7",
   resave: false, 
   saveUninitialized: false,
   cookie: {
-    secure: false,  // Set to true if using HTTPS
+    secure: false,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   },
 }));
@@ -46,10 +47,13 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id, function (err, user) {
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
     done(null, user);
-  });
+  } catch (err) {
+    done(err);
+  }
 });
 
 passport.use(
@@ -82,10 +86,16 @@ passport.use(
   )
 );
 
-
 const googleAuth = passport.authenticate("google", {
-  scope: ["profile", "email"],
-});
+  scope: ["profile", "email"] })
+
+const handleAuthRedirect = (req, res) => {
+	if (req.isAuthenticated()) {
+		res.redirect(`${BASE_URL}`); // Redirect to home on success
+	} else {
+		res.redirect(`${BASE_URL}/pages/login?error=auth_failed`); // Redirect to login on failure
+	}
+};
 
 const port = process.env.PORT || 8080;
 
@@ -117,6 +127,4 @@ app.get('/auth/current-user', requireAuth, Authentication.currentUser);
 
 // Google login and logout routes
 app.get("/auth/google", googleAuth);
-app.get("/auth/google/callback", googleAuth, (req, res) => {
-  res.send("You are logged in via Google!");
-});
+app.get("/auth/google/callback", googleAuth, handleAuthRedirect, Authentication.currentUser);
