@@ -3,13 +3,18 @@ import crypto from "crypto"
 
 const Schema = mongoose.Schema
 
-// Define our model
 const UserSchema = new Schema({
 	googleId: String,
 	email: { type: String, unique: true, lowercase: true },
 	username: { type: String, unique: true },
 	hash: String,
-	salt: String,
+	savedExercises: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Exercise' }],
+	workoutPlan: [
+    {
+      day: String,
+      exercises: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Exercise' }]
+    }
+  ]
 });
 
 // Before user sets password, passport hashes and salts the password to be saved

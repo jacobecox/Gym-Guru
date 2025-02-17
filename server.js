@@ -17,6 +17,7 @@ import getAPICategories from './routes/getAPICategories.js'
 import getAllAPIExercises from './routes/getAPIAllExercises.js'
 import getCategories from './routes/getCategories.js'
 import getAllExercises from './routes/getAllExercises.js'
+import postSavedExercises from './routes/postSavedExercises.js'
 
 const app = express();  
 dotenv.config({ path: ".env.development.local" });
@@ -31,6 +32,7 @@ app.use(cors({
 	credentials: true,
 }));
 
+// Storing sessions inside db used
 app.use(
   session({
     secret: "passkeysecret",
@@ -64,6 +66,7 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+// Google Oauth functionality. We send client details through link which reroutes user to Google to login. Google returns via callback route with user's data
 passport.use(
   "google",
   new GoogleStrategy(
@@ -75,12 +78,12 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         // Check if the user already exists
-        let existingUser = await User.findOne({ googleId: profile.id });
+        const existingUser = await User.findOne({ googleId: profile.id });
 
         if (existingUser) {
           return done(null, existingUser);
         }
-				
+				// Create new user with google id if one doesn't exist
         const newUser = await new User({
           googleId: profile.id,
           username: profile.displayName,
@@ -98,6 +101,7 @@ passport.use(
 const googleAuth = passport.authenticate("google", {
   scope: ["profile", "email"] })
 
+// Handles when google send user back with data. We store user data with token in url params to be sent back when redirected to our success page
 const handleAuthRedirect = (req, res) => {
   if (req.isAuthenticated()) {
     const user = {
@@ -139,8 +143,8 @@ app.use(getAllExercises)
 app.post('/auth/login', requireLogin, Authentication.login);
 app.post('/auth/create-account', Authentication.createAccount);
 app.get('/auth/current-user', requireAuth, Authentication.currentUser);
+app.use(postSavedExercises)
 
 // Google login and logout routes
 app.get("/auth/google", googleAuth);
-app.get(
-  "/auth/google/callback", googleAuth, handleAuthRedirect)
+app.get("/auth/google/callback", googleAuth, handleAuthRedirect)
