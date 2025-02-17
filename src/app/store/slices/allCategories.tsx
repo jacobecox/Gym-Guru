@@ -70,7 +70,6 @@ export const categoriesSlice = createSlice({
     builder.addCase(fetchMuscleCategories.fulfilled, (state, action) => {
       state.loading = false;
       state.muscleCategories = action.payload;
-      console.log("muscle category:", action.payload);
     });
     builder.addCase(fetchMuscleCategories.rejected, (state, action) => {
       state.loading = false;
@@ -82,7 +81,6 @@ export const categoriesSlice = createSlice({
     builder.addCase(fetchEquipmentCategories.fulfilled, (state, action) => {
       state.loading = false;
       state.equipmentCategories = action.payload;
-      console.log("equipment category:", action.payload);
     });
     builder.addCase(fetchEquipmentCategories.rejected, (state, action) => {
       state.error = action.error.message;

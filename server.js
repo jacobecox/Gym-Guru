@@ -1,6 +1,7 @@
 // Dependencies
 import express from 'express';
 import mongoose from 'mongoose';
+import MongoStore from "connect-mongo";
 import cors from 'cors';
 import dotenv from 'dotenv';
 import passport from 'passport';
@@ -30,15 +31,22 @@ app.use(cors({
 	credentials: true,
 }));
 
-app.use(session({
-  secret: "passkeysecret7",
-  resave: false, 
-  saveUninitialized: false,
-  cookie: {
-    secure: false,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  },
-}));
+app.use(
+  session({
+    secret: "passkeysecret",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      collectionName: "sessions",
+    }),
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    },
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -66,7 +74,8 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const existingUser = await User.findOne({ googleId: profile.id });
+        // Check if the user already exists
+        let existingUser = await User.findOne({ googleId: profile.id });
 
         if (existingUser) {
           return done(null, existingUser);
@@ -90,11 +99,17 @@ const googleAuth = passport.authenticate("google", {
   scope: ["profile", "email"] })
 
 const handleAuthRedirect = (req, res) => {
-	if (req.isAuthenticated()) {
-		res.redirect(`${BASE_URL}`); // Redirect to home on success
-	} else {
-		res.redirect(`${BASE_URL}/pages/login?error=auth_failed`); // Redirect to login on failure
-	}
+  if (req.isAuthenticated()) {
+    const user = {
+      email: req.user.email,
+      username: req.user.username,
+      token: Authentication.userToken(req.user),
+    };
+
+    res.redirect(`${BASE_URL}/pages/login-success?token=${user.token}`);
+  } else {
+    res.redirect(`${BASE_URL}/pages/login?error=auth_failed`);
+  }
 };
 
 const port = process.env.PORT || 8080;
@@ -127,4 +142,5 @@ app.get('/auth/current-user', requireAuth, Authentication.currentUser);
 
 // Google login and logout routes
 app.get("/auth/google", googleAuth);
-app.get("/auth/google/callback", googleAuth, handleAuthRedirect, Authentication.currentUser);
+app.get(
+  "/auth/google/callback", googleAuth, handleAuthRedirect)

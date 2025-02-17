@@ -80,7 +80,8 @@ export default function NavBar() {
       );
     } else if (
       pathName !== "/pages/login" &&
-      pathName !== "/pages/create-account"
+      pathName !== "/pages/create-account" &&
+      pathName !== "/pages/login-success"
     ) {
       return (
         <>

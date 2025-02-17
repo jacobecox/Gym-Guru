@@ -3,7 +3,7 @@ import User from "../models/user.js";
 import keys from "../config/keys.js";
 
 // Create token for user with user id, time given, and expiration date
-const userToken = (user) => {
+export const userToken = (user) => {
   const timestamp = Math.round(Date.now() / 1000);
   return jwt.encode(
     {
@@ -15,16 +15,23 @@ const userToken = (user) => {
   )
 }
 
+
 // When user logs in, they receive back the user's email and token to make authenticated requests
 export const login = (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: "Authentication failed" });
   }
-  res.send({ email: req.user.email, username: req.user.username, token:userToken(req.user) })
+  res.send({ email: req.user.email, username: req.user.username, token: userToken(req.user) })
 }
 
+
 // Function to create a user which has current user's email and token
-export const currentUser = (req,res) => {
+export const currentUser = (req, res) => {
+
+  if (!req.user) {
+    return res.status(401).json({ message: "User not authenticated" });
+  }
+
   const user = {
     email: req.user.email,
     username: req.user.username,
@@ -32,6 +39,7 @@ export const currentUser = (req,res) => {
   };
   res.send(user);
 };
+
 
 // Function to create a new account
 export const createAccount = async (req, res, next) => {
@@ -63,7 +71,9 @@ export const createAccount = async (req, res, next) => {
   }
 };
 
+
 const Authentication = {
+  userToken,
   login,
   currentUser,
   createAccount,
