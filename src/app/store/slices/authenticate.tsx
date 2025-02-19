@@ -47,6 +47,7 @@ export const login = createAsyncThunk(
       if (!isServer) {
         localStorage.removeItem("token");
       }
+
       return response.data;
     } catch (err: any) {
       if (err.response) {

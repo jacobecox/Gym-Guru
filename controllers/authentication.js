@@ -57,7 +57,7 @@ export const createAccount = async (req, res, next) => {
     if (existingUser) {
       return res.status(422).send({error: 'Email or username is already in use'})
     }
-// If email isn't in use a new user is created with inputted email and password
+// If email/username isn't in use a new user is created
     const user = new User();
     user.email = email;
     user.username = username;

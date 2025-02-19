@@ -7,7 +7,7 @@ import keys from "../config/keys.js";
 // Passport expects username field to be a username, we are specifying the username field to be either email or username
 const localOptions = { usernameField: 'login' };
 
-const localLogin = new LocalStrategy(localOptions, async (login, password, done) => {  
+const localLogin = new LocalStrategy(localOptions, async (login, password, done) => {
   // Verify this email and password, call done with the user
 	// if it is the correct email and password
 	// otherwise, call done with false
@@ -23,7 +23,7 @@ const localLogin = new LocalStrategy(localOptions, async (login, password, done)
     }
     return done(null, user)
   } catch(err) {
-    return done(err, false)
+    return done(err)
   };
 });
 
@@ -36,7 +36,7 @@ const jwtOptions = {
 // Create JWT Strategy
 const jwtLogin = new Strategy(jwtOptions, async (payload, done) => {
     // See if the user ID in the payload exists in our database
-    // If it does, call 'done' with that other
+    // If it does, call 'done' with that
     // otherwise, call done without a user object
     try {
       const user = await User.findById(payload.sub);

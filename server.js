@@ -41,12 +41,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI,
       collectionName: "sessions",
-    }),
-    cookie: {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    },
+    })
   })
 );
 
@@ -118,8 +113,8 @@ const handleAuthRedirect = (req, res) => {
 
 const port = process.env.PORT || 8080;
 
-const requireAuth = passport.authenticate('jwt', { session: false });
-const requireLogin = passport.authenticate('local', { session: false });
+const requireAuth = passport.authenticate('jwt');
+const requireLogin = passport.authenticate('local');
 
 mongoose
 	.connect(keys.MONGO_URI)

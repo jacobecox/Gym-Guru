@@ -8,11 +8,12 @@ const UserSchema = new Schema({
 	email: { type: String, unique: true, lowercase: true },
 	username: { type: String, unique: true },
 	hash: String,
-	savedExercises: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Exercise' }],
+	salt: String,
+	savedExercises: [{ type: String }],
 	workoutPlan: [
     {
       day: String,
-      exercises: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Exercise' }]
+      exercises: [{ type: String }], 
     }
   ]
 });
