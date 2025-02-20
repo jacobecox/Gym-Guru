@@ -1,9 +1,8 @@
 "use client";
 import NavBar from "@/app/components/navBar";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/app/store/store";
-import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Exercises } from "@/app/types";
 import {

@@ -18,6 +18,8 @@ import getAllAPIExercises from './routes/getAPIAllExercises.js'
 import getCategories from './routes/getCategories.js'
 import getAllExercises from './routes/getAllExercises.js'
 import postSavedExercises from './routes/postSavedExercises.js'
+import deleteSavedExercises from './routes/deleteSavedExercises.js'
+import getSavedExercises from './routes/getSavedExercises.js'
 
 const app = express();  
 dotenv.config({ path: ".env.development.local" });
@@ -138,7 +140,9 @@ app.use(getAllExercises)
 app.post('/auth/login', requireLogin, Authentication.login);
 app.post('/auth/create-account', Authentication.createAccount);
 app.get('/auth/current-user', requireAuth, Authentication.currentUser);
-app.use(postSavedExercises)
+app.use(postSavedExercises);
+app.use(deleteSavedExercises);
+app.use(getSavedExercises);
 
 // Google login and logout routes
 app.get("/auth/google", googleAuth);

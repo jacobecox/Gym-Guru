@@ -9,13 +9,21 @@ const UserSchema = new Schema({
 	username: { type: String, unique: true },
 	hash: String,
 	salt: String,
-	savedExercises: [{ type: String }],
-	workoutPlan: [
-    {
+	savedExercises: [{
+		id: String,
+		name: String,
+		equipment: String,
+		target: String,
+}],
+	workoutPlan: [{
       day: String,
-      exercises: [{ type: String }], 
-    }
-  ]
+      exercises: [{
+				id: String,
+				name: String,
+				equipment: String,
+				target: String
+			}], 
+    }]
 });
 
 // Before user sets password, passport hashes and salts the password to be saved

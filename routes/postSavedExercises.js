@@ -6,19 +6,24 @@ const router = express.Router();
 
 router.post('/saved-exercises', authMiddleware, async (req, res) => {
   try {
-    const { exerciseId } = req.body;
+    const { id, name, equipment, target } = req.body;
     const userId = req.user._id;
 
-    if (!exerciseId) {
-      return res.status(400).json({ message: "Missing exerciseId" });
+    if (!id) {
+      return res.status(400).json({ message: "Missing exercise id" });
     }
 
-    // Finds user by id and adds a saved exercise by id to saved exercises if it is a new id to prevent duplicates
+    const existingExercise = await User.findOne({ _id: userId, "savedExercises.id": id });
+
+    if (existingExercise) {
+      return res.status(400).json({ message: "Exercise already saved" });
+    }
+
     const user = await User.findByIdAndUpdate(
       userId,
-      { $addToSet: { savedExercises: exerciseId } },
+      { $addToSet: { savedExercises: {id, name, equipment, target} } },
       { new: true }
-    ).populate("savedExercises");
+    );
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
