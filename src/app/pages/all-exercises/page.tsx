@@ -153,7 +153,7 @@ export default function AllExercises() {
       </div>
 
       {/* Handle no exercises */}
-      {exercises.length < 1 ? (
+      {exercises.length === 0 ? (
         <p className="text-black dark:text-white font-extrabold text-4xl text-center">
           No exercises found
         </p>

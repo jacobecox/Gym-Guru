@@ -9,7 +9,7 @@ export const userToken = (user) => {
     {
       sub: user.id, // sub = subject (User ID)
       iat: timestamp, // iat = issued at
-      exp: timestamp + 5 * 60 * 60, // exp = expires (in 5 hours)
+      exp: timestamp + 1 * 60 * 60, // exp = expires (in 1 hour)
     },
     keys.TOKEN_SECRET // secret key for signing token
   )

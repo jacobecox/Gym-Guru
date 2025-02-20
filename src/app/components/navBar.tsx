@@ -46,7 +46,6 @@ export default function NavBar() {
   // If user is authenticated then calls for user info
   useEffect(() => {
     if (authenticated && token) {
-      console.log("fetching user");
       dispatch(fetchUser());
     }
   }, [authenticated, token, dispatch]);
@@ -61,6 +60,7 @@ export default function NavBar() {
 
   const handleLogout = () => {
     dispatch(logout());
+    router.push("/");
   };
 
   const renderLinks = () => {

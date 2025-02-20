@@ -1,31 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import { Exercise } from "@/app/types";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const fetchSavedExercises = createAsyncThunk(
   "savedExercises, fetchSavedExercises",
-  async () => {
-    console.log("slice called");
-
-    // fix this
-    const authenticated = useSelector((state: RootState) => state.authenticate);
-
+  async (token: string) => {
     try {
-      if (!authenticated) {
-        alert("Please log in to view saved exercises.");
-        return;
-      }
       const response = await fetch(`${BASE_URL}/saved-exercises`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authenticated}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log("response:", response);
 
       return response.json();
     } catch (err) {
@@ -35,7 +24,7 @@ export const fetchSavedExercises = createAsyncThunk(
 );
 
 type savedExercisesState = {
-  savedExercises: string[];
+  savedExercises: Exercise[];
   loading: boolean;
   error?: string | null;
 };
@@ -55,11 +44,13 @@ export const savedExercisesSlice = createSlice({
     builder.addCase(fetchSavedExercises.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchSavedExercises.fulfilled, (state, action) => {
-      state.loading = false;
-      state.savedExercises = action.payload;
-      console.log("saved Exercises in state:", action.payload);
-    });
+    builder.addCase(
+      fetchSavedExercises.fulfilled,
+      (state, action: PayloadAction<{ savedExercises: Exercise[] }>) => {
+        state.loading = false;
+        state.savedExercises = action.payload.savedExercises;
+      }
+    );
     builder.addCase(fetchSavedExercises.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
