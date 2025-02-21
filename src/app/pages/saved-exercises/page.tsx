@@ -51,7 +51,7 @@ export default function SavedExercises() {
       ) : null}
 
       {/* Display mapped exercises */}
-      <div className="px-4 flex   ">
+      <div className="px-4 grid gid-cols-1 xl:grid-cols-3 gap-4">
         {savedExercises?.map((exercise) => {
           return (
             <button

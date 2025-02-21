@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "@/app/store/store";
 import { fetchExerciseDetail } from "@/app/store/slices/exerciseDetail";
 import NavBar from "@/app/components/navBar";
@@ -37,6 +37,33 @@ export default function ExerciseDetail() {
     }
   }, [dispatch, id]);
 
+  const handleSavedExercises = async () => {
+    if (!exerciseDetail || !token) {
+      alert("Log in to save an exercise");
+      return;
+    }
+    try {
+      const resultAction = await dispatch(
+        saveExercise({ token, exerciseDetail })
+      );
+      const result = unwrapResult(resultAction); // Extracts the payload or error
+
+      // Reset error and route after confirming success
+      dispatch(resetError());
+      router.push("/pages/success-page");
+      return result;
+    } catch (err) {
+      return err;
+    }
+  };
+
+  // Resets error when component unmounts
+  useEffect(() => {
+    return () => {
+      dispatch(resetError());
+    };
+  }, [dispatch]);
+
   if (loading === true) {
     return <LoadingSpinner />;
   }
@@ -50,10 +77,12 @@ export default function ExerciseDetail() {
           <SavedExercisesButton />
           <WorkoutPlanButton />
         </div>
+
         {/* Exercise Name */}
         <p className="text-center bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent font-extrabold text-7xl p-5 uppercase tracking-wide">
           {exerciseDetail?.name}
         </p>
+
         {/* Muscle and Equipment */}
         <div className="dark:bg-gray-900 bg-gray-200 grid grid-cols-2 rounded-md sm:mx-40 text-center p-4">
           <p className="dark:text-white text-yellow-600 text-xl sm:text-2xl px-2">
@@ -69,18 +98,11 @@ export default function ExerciseDetail() {
             {exerciseDetail?.equipment.toUpperCase()}
           </p>
         </div>
+
         {/* Save exercise buttons */}
         <div className="grid grid-cols-2 rounded-md sm:mx-40 text-center p-2 m-6">
           <button
-            onClick={() => {
-              //  NEED TO FIX ROUTING AND REFRESHING ERROR MESSAGES
-              if (exerciseDetail && token) {
-                dispatch(saveExercise({ token, exerciseDetail }));
-                dispatch(resetError());
-              } else {
-                alert("Log in to save an exercise");
-              }
-            }}
+            onClick={handleSavedExercises}
             className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500 hover:text-white transition"
           >
             Save Exercise
@@ -89,19 +111,21 @@ export default function ExerciseDetail() {
           <button className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500 hover:text-white transition">
             Add to My Workout
           </button>
+
           {/* Handle errors for save exercise */}
           {error && <p className="text-red-500 text-xl mt-2">{error}</p>}
         </div>
-
         <div className="flex flex-col rounded-md text-center p-2 m-6 justify-center items-center">
           {/* Gif Animation */}
           <div className="dark:bg-gray-900 bg-gray-200 p-4 my-4 w-auto rounded-md">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={exerciseDetail?.gifUrl}
               alt="Workout Animation"
               className="rounded-md object-fill"
             />
           </div>
+
           {/* Instructions */}
           <div className="rounded-md dark:bg-gray-900 bg-gray-900 p-6">
             <p className="text-white text-4xl mt-4 font-bold">Instructions</p>
