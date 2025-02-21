@@ -23,6 +23,42 @@ export const fetchSavedExercises = createAsyncThunk(
   }
 );
 
+export const saveExercise = createAsyncThunk(
+  "savedExercises/saveExercise",
+  async (
+    {
+      token,
+      exerciseDetail,
+    }: {
+      token: string;
+      exerciseDetail: Exercise;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await fetch(`${BASE_URL}/saved-exercises`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(exerciseDetail),
+      });
+
+      const data = await response.json();
+
+      if (data.message === "Exercise already saved") {
+        return rejectWithValue(data.message);
+      }
+
+      return data.savedExercise;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+);
+
 type savedExercisesState = {
   savedExercises: Exercise[];
   loading: boolean;
@@ -38,9 +74,14 @@ const initialState: savedExercisesState = {
 export const savedExercisesSlice = createSlice({
   name: "savedExercises",
   initialState,
-  reducers: {},
+  reducers: {
+    resetError: (state) => {
+      state.error = null;
+    },
+  },
 
   extraReducers: (builder) => {
+    // State to fetch all saved exercises
     builder.addCase(fetchSavedExercises.pending, (state) => {
       state.loading = true;
     });
@@ -51,11 +92,30 @@ export const savedExercisesSlice = createSlice({
         state.savedExercises = action.payload.savedExercises;
       }
     );
-    builder.addCase(fetchSavedExercises.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+    builder
+      .addCase(fetchSavedExercises.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      // State to save a new exercise
+      .addCase(saveExercise.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        saveExercise.fulfilled,
+        (state, action: PayloadAction<Exercise>) => {
+          state.loading = false;
+          state.savedExercises.push(action.payload);
+          state.error = null;
+        }
+      )
+      .addCase(saveExercise.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
+export const { resetError } = savedExercisesSlice.actions;
 export default savedExercisesSlice.reducer;

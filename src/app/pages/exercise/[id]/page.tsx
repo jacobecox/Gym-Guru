@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/store/store";
@@ -10,18 +10,24 @@ import LoadingSpinner from "@/app/components/loadingSpinner";
 import SavedExercisesButton from "@/app/components/buttons/savedExercisesButton";
 import ExploreExercisesButton from "@/app/components/buttons/exploreExercisesButton";
 import WorkoutPlanButton from "@/app/components/buttons/workoutPlanButton";
+import { saveExercise } from "@/app/store/slices/savedExerciseAcions";
+import { resetError } from "@/app/store/slices/savedExerciseAcions";
 
 export default function ExerciseDetail() {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const { id } = useParams();
 
   const exerciseDetail = useSelector(
     (state: RootState) => state.exerciseDetail.exerciseDetail
   );
-
   const loading = useSelector(
     (state: RootState) => state.exerciseDetail.loading
   );
+  const token = useSelector(
+    (state: RootState) => state.authenticate.authenticated
+  );
+  const { error } = useSelector((state: RootState) => state.savedExercise);
 
   // Fetches current id using useParams and passes id into redux slice to call for exercise details
   useEffect(() => {
@@ -65,12 +71,26 @@ export default function ExerciseDetail() {
         </div>
         {/* Save exercise buttons */}
         <div className="grid grid-cols-2 rounded-md sm:mx-40 text-center p-2 m-6">
-          <button className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500 hover:text-white transition">
+          <button
+            onClick={() => {
+              //  NEED TO FIX ROUTING AND REFRESHING ERROR MESSAGES
+              if (exerciseDetail && token) {
+                dispatch(saveExercise({ token, exerciseDetail }));
+                dispatch(resetError());
+              } else {
+                alert("Log in to save an exercise");
+              }
+            }}
+            className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500 hover:text-white transition"
+          >
             Save Exercise
           </button>
+
           <button className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500 hover:text-white transition">
             Add to My Workout
           </button>
+          {/* Handle errors for save exercise */}
+          {error && <p className="text-red-500 text-xl mt-2">{error}</p>}
         </div>
 
         <div className="flex flex-col rounded-md text-center p-2 m-6 justify-center items-center">
