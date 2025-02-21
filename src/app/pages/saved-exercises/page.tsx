@@ -1,24 +1,35 @@
 "use client";
 import NavBar from "@/app/components/navBar";
 import { useSelector } from "react-redux";
-import { RootState } from "@/app/store/store";
+import { AppDispatch, RootState } from "@/app/store/store";
 import { useRouter } from "next/navigation";
 import ExploreExercisesButton from "@/app/components/buttons/exploreExercisesButton";
 import WorkoutPlanButton from "@/app/components/buttons/workoutPlanButton";
+import { useDispatch } from "react-redux";
+import { deleteExercise } from "@/app/store/slices/savedExerciseAcions";
 
 export default function SavedExercises() {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
   const savedExercises = useSelector(
     (state: RootState) => state.savedExercise.savedExercises
   );
+  const token = useSelector(
+    (state: RootState) => state.authenticate.authenticated
+  );
 
-  const handleClick = (id: number) => {
+  const handleClick = (id: string) => {
     router.push(`/pages/exercise/${id}`);
   };
 
   const handleBack = () => {
     router.push("/");
+  };
+
+  const handleDelete = (e: React.MouseEvent, exerciseId: string) => {
+    e.stopPropagation(); // Prevents the parent button click event
+    dispatch(deleteExercise({ token, exerciseId }));
   };
 
   return (
@@ -54,13 +65,20 @@ export default function SavedExercises() {
       <div className="px-4 grid gid-cols-1 xl:grid-cols-3 gap-4">
         {savedExercises?.map((exercise) => {
           return (
-            <button
+            <div
               key={exercise.id}
               onClick={() => {
                 handleClick(exercise.id);
               }}
               className="bg-gray-900 hover:bg-gray-800 rounded-lg p-6 m-2"
             >
+              {/* NEED TO CHECK DELETE FUNCTIONALITY AND PLACE WARNING WINDOW */}
+              <button
+                onClick={(e) => handleDelete(e, exercise.id)}
+                className="bg-red-500 text-2xl shadow-md hover:bg-red-400 px-2 py-1 rounded-full"
+              >
+                ❌
+              </button>
               <h1 className=" font-extrabold text-5xl text-center tracking-wide text-yellow-400 uppercase">
                 {exercise.name}
               </h1>
@@ -82,7 +100,7 @@ export default function SavedExercises() {
                   </p>
                 </div>
               </div>
-            </button>
+            </div>
           );
         })}
       </div>

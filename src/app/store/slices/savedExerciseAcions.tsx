@@ -59,6 +59,40 @@ export const saveExercise = createAsyncThunk(
   }
 );
 
+export const deleteExercise = createAsyncThunk(
+  "savedExercises/deleteExercise",
+  async (
+    {
+      token,
+      exerciseId,
+    }: {
+      token: string | null;
+      exerciseId: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await fetch(`${BASE_URL}/saved-exercises`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ exerciseId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete exercise");
+      }
+
+      return exerciseId;
+    } catch (err) {
+      console.error(err);
+      return rejectWithValue("Failed to delete exercise");
+    }
+  }
+);
+
 type savedExercisesState = {
   savedExercises: Exercise[];
   loading: boolean;
@@ -114,6 +148,23 @@ export const savedExercisesSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
+    // State to delete exercise
+    builder.addCase(deleteExercise.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      deleteExercise.fulfilled,
+      (state, action: PayloadAction<string>) => {
+        state.loading = false;
+        state.savedExercises = state.savedExercises.filter(
+          (exercise) => exercise.id !== action.payload
+        );
+      }
+    );
+    builder.addCase(deleteExercise.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
+    });
   },
 });
 
