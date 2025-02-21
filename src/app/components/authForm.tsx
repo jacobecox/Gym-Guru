@@ -178,7 +178,10 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
 
         {error && <p className="text-red-500">{error}</p>}
 
-        <button className="bg-yellow-400 rounded-md p-2 m-6" type="submit">
+        <button
+          className="bg-yellow-400 hover:bg-yellow-300 rounded-md p-2 m-6"
+          type="submit"
+        >
           Submit
         </button>
       </form>

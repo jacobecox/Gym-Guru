@@ -1,29 +1,13 @@
 "use client";
 import NavBar from "@/app/components/navBar";
-import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "@/app/store/store";
-import { useEffect } from "react";
-import { fetchSavedExercises } from "@/app/store/slices/savedExerciseAcions";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store/store";
 import { useRouter } from "next/navigation";
+import ExploreExercisesButton from "@/app/components/buttons/exploreExercisesButton";
+import WorkoutPlanButton from "@/app/components/buttons/workoutPlanButton";
 
 export default function SavedExercises() {
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
-
-  const token = useSelector(
-    (state: RootState) => state.authenticate.authenticated
-  );
-
-  // SEE IF WE CAN MOVE THIS TO HOME PAGE SO IT CAN RUN TOKEN BEFORE ROUTING TO PAGE OF SAVED EXERCISES
-  useEffect(() => {
-    if (!token) {
-      alert("Please log in to view saved exercises.");
-      router.push("/pages/login");
-      return;
-    }
-
-    dispatch(fetchSavedExercises(token));
-  }, [dispatch, token, router]);
 
   const savedExercises = useSelector(
     (state: RootState) => state.savedExercise.savedExercises
@@ -40,8 +24,11 @@ export default function SavedExercises() {
   return (
     <div className="bg-white dark:bg-black">
       <NavBar />
-
-      <div className="p-4">
+      <div className="flex justify-evenly">
+        <ExploreExercisesButton />
+        <WorkoutPlanButton />
+      </div>
+      <div className="px-4">
         {/* Back button */}
         <button
           onClick={handleBack}
@@ -51,8 +38,8 @@ export default function SavedExercises() {
         </button>
 
         {/* Title */}
-        <h1 className="text-7xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent font-extrabold text-center p-6 ">
-          Saved Exercises
+        <h1 className="text-7xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent font-extrabold text-center px-6 my-2 ">
+          My Saved Exercises
         </h1>
       </div>
 
@@ -64,7 +51,7 @@ export default function SavedExercises() {
       ) : null}
 
       {/* Display mapped exercises */}
-      <div>
+      <div className="px-4 flex   ">
         {savedExercises?.map((exercise) => {
           return (
             <button

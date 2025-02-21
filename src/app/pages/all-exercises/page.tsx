@@ -10,6 +10,8 @@ import {
   setEquipmentFilter,
 } from "@/app/store/slices/allCategories";
 import LoadingSpinner from "@/app/components/loadingSpinner";
+import SavedExercisesButton from "@/app/components/buttons/savedExercisesButton";
+import WorkoutPlanButton from "@/app/components/buttons/workoutPlanButton";
 
 export default function AllExercises() {
   const router = useRouter();
@@ -86,18 +88,22 @@ export default function AllExercises() {
   return (
     <div className="bg-white dark:bg-black">
       <NavBar />
+      <div className="flex justify-evenly">
+        <SavedExercisesButton />
+        <WorkoutPlanButton />
+      </div>
 
-      <div className="p-4">
+      <div className="px-4">
         {/* Back button */}
         <button
           onClick={handleBack}
-          className="text-left bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 mx-4 mt-16 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
+          className="text-left bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 mx-4 mt-16 hover:bg-yellow-300 hover:text-white dark:hover:bg-white transition"
         >
           Back
         </button>
 
         {/* Title */}
-        <h1 className="text-7xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent font-extrabold text-center p-6 ">
+        <h1 className="text-7xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent font-extrabold text-center px-6 my-2">
           Explore Exercises
         </h1>
 
@@ -168,7 +174,7 @@ export default function AllExercises() {
               onClick={() => {
                 handleClick(exercise.exercise.id);
               }}
-              className="bg-gray-900 hover:bg-gray-800 rounded-lg p-6 m-2"
+              className="bg-gray-900 hover:bg-gray-800 rounded-lg p-6 m-2 transition"
             >
               <h1 className=" font-extrabold text-5xl text-center tracking-wide text-yellow-400 uppercase">
                 {exercise.exercise.name}
@@ -213,7 +219,7 @@ export default function AllExercises() {
             currentPage < totalPages && handlePageChange(currentPage + 1)
           }
           disabled={currentPage === totalPages}
-          className="px-3 py-2 rounded bg-gray-300 text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+          className="px-3 py-2 rounded bg-gray-300 text-gray-700 hover:bg-gray-200 disabled:opacity-50 transition"
         >
           Next &#8594;
         </button>

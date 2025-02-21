@@ -72,7 +72,7 @@ export default function NavBar() {
           </h1>
           <button
             onClick={handleLogout}
-            className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
+            className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white transition"
           >
             Logout
           </button>
@@ -88,7 +88,7 @@ export default function NavBar() {
           <div className="flex justify-end items-center pt-2 px-6 absolute top-5 left-0 right-0 z-0">
             <button
               onClick={handleLogin}
-              className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
+              className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white transition"
             >
               Login
             </button>
@@ -96,7 +96,7 @@ export default function NavBar() {
           <div className="flex justify-end items-center pt-2 px-6 absolute top-16 left-0 right-0">
             <button
               onClick={handleCreateAccount}
-              className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
+              className="text-right bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black md:text-2xl text-lg shadow-lg rounded-md px-4 hover:bg-yellow-300 hover:text-white dark:hover:bg-white transition"
             >
               Create Account
             </button>

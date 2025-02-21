@@ -2,16 +2,29 @@
 import Image from "next/image";
 import NavBar from "./components/navBar";
 import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/app/store/store";
+import { fetchSavedExercises } from "@/app/store/slices/savedExerciseAcions";
 
 export default function App() {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const token = useSelector(
+    (state: RootState) => state.authenticate.authenticated
+  );
 
   // Routes for main buttons on home page
-  const exploreExercisesClick = () => {
+  const exploreExercises = () => {
     router.push("/pages/all-exercises");
   };
 
   const savedExercises = () => {
+    if (!token) {
+      router.push("/pages/login");
+      alert("Please log in to view saved exercises.");
+      return;
+    }
+    dispatch(fetchSavedExercises(token));
     router.push("/pages/saved-exercises");
   };
 
@@ -55,20 +68,20 @@ export default function App() {
           </div>
           <div className="flex flex-col space-y-4 items-stretch justify-center max-w-lg mx-auto w-full py-4">
             <button
-              onClick={exploreExercisesClick}
-              className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400"
+              onClick={exploreExercises}
+              className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400 transition"
             >
               Explore Exercises
             </button>
             <button
               onClick={savedExercises}
-              className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400"
+              className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400 transition"
             >
-              Saved Exercises
+              My Saved Exercises
             </button>
             <button
               onClick={workoutPlan}
-              className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400"
+              className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400 transition"
             >
               My Workout Plan
             </button>

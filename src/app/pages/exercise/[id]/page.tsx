@@ -1,21 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/store/store";
 import { fetchExerciseDetail } from "@/app/store/slices/exerciseDetail";
 import NavBar from "@/app/components/navBar";
 import LoadingSpinner from "@/app/components/loadingSpinner";
+import SavedExercisesButton from "@/app/components/buttons/savedExercisesButton";
+import ExploreExercisesButton from "@/app/components/buttons/exploreExercisesButton";
+import WorkoutPlanButton from "@/app/components/buttons/workoutPlanButton";
 
 export default function ExerciseDetail() {
-  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { id } = useParams();
-
-  const handleBack = () => {
-    router.push("/pages/all-exercises");
-  };
 
   const exerciseDetail = useSelector(
     (state: RootState) => state.exerciseDetail.exerciseDetail
@@ -40,14 +38,12 @@ export default function ExerciseDetail() {
   return (
     <div>
       <NavBar />
-      <div className="p-4">
-        {/* Back button */}
-        <button
-          onClick={handleBack}
-          className="text-left bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 mx-4 mt-16 hover:bg-yellow-300 hover:text-white dark:hover:bg-white"
-        >
-          Back
-        </button>
+      <div className="px-4">
+        <div className="flex justify-evenly">
+          <ExploreExercisesButton />
+          <SavedExercisesButton />
+          <WorkoutPlanButton />
+        </div>
         {/* Exercise Name */}
         <p className="text-center bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent font-extrabold text-7xl p-5 uppercase tracking-wide">
           {exerciseDetail?.name}
@@ -69,10 +65,10 @@ export default function ExerciseDetail() {
         </div>
         {/* Save exercise buttons */}
         <div className="grid grid-cols-2 rounded-md sm:mx-40 text-center p-2 m-6">
-          <button className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500">
+          <button className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500 hover:text-white transition">
             Save Exercise
           </button>
-          <button className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500 ">
+          <button className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500 hover:text-white transition">
             Add to My Workout
           </button>
         </div>
