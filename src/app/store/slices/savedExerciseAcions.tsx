@@ -78,7 +78,7 @@ export const deleteExercise = createAsyncThunk(
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ exerciseId }),
+        body: JSON.stringify({ id: exerciseId }),
       });
 
       if (!response.ok) {
@@ -110,29 +110,30 @@ export const savedExercisesSlice = createSlice({
   initialState,
   reducers: {
     resetError: (state) => {
-      state.error = null;
+      state.error = null; // Sets error to null to reset error
     },
   },
 
   extraReducers: (builder) => {
     // State to fetch all saved exercises
-    builder.addCase(fetchSavedExercises.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(
-      fetchSavedExercises.fulfilled,
-      (state, action: PayloadAction<{ savedExercises: Exercise[] }>) => {
-        state.loading = false;
-        state.savedExercises = action.payload.savedExercises;
-      }
-    );
     builder
+      .addCase(fetchSavedExercises.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        fetchSavedExercises.fulfilled,
+        (state, action: PayloadAction<{ savedExercises: Exercise[] }>) => {
+          state.loading = false;
+          state.savedExercises = action.payload.savedExercises; // Returns all savedExercises
+        }
+      )
       .addCase(fetchSavedExercises.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-      })
+      });
 
-      // State to save a new exercise
+    // State to save a new exercise
+    builder
       .addCase(saveExercise.pending, (state) => {
         state.loading = true;
       })
@@ -140,7 +141,7 @@ export const savedExercisesSlice = createSlice({
         saveExercise.fulfilled,
         (state, action: PayloadAction<Exercise>) => {
           state.loading = false;
-          state.savedExercises.push(action.payload);
+          state.savedExercises.push(action.payload); // Pushes exercise to savedExercises array
           state.error = null;
         }
       )
@@ -148,23 +149,25 @@ export const savedExercisesSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
+
     // State to delete exercise
-    builder.addCase(deleteExercise.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(
-      deleteExercise.fulfilled,
-      (state, action: PayloadAction<string>) => {
+    builder
+      .addCase(deleteExercise.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        deleteExercise.fulfilled,
+        (state, action: PayloadAction<string>) => {
+          state.loading = false;
+          state.savedExercises = state.savedExercises.filter(
+            (exercise) => exercise.id !== action.payload
+          ); // Filters out exercise from savedExercises
+        }
+      )
+      .addCase(deleteExercise.rejected, (state, action) => {
         state.loading = false;
-        state.savedExercises = state.savedExercises.filter(
-          (exercise) => exercise.id !== action.payload
-        );
-      }
-    );
-    builder.addCase(deleteExercise.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
-    });
+        state.error = action.payload as string;
+      });
   },
 });
 

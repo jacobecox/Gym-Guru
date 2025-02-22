@@ -69,11 +69,7 @@ export default function AllExercises() {
     setCurrentPage(page);
   };
 
-  const handleBack = () => {
-    router.push("/");
-  };
-
-  const handleClick = (id: number) => {
+  const handleClick = (id: string) => {
     router.push(`/pages/exercise/${id}`);
   };
 
@@ -96,7 +92,7 @@ export default function AllExercises() {
       <div className="px-4">
         {/* Back button */}
         <button
-          onClick={handleBack}
+          onClick={() => router.back()}
           className="text-left bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 mx-4 mt-16 hover:bg-yellow-300 hover:text-white dark:hover:bg-white transition"
         >
           Back

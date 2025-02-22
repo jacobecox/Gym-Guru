@@ -174,8 +174,6 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
           </>
         )}
 
-        {/* Google login option */}
-
         {error && <p className="text-red-500">{error}</p>}
 
         <button
@@ -186,6 +184,7 @@ export const AuthForm = ({ type = "login" }: AuthFormProps) => {
         </button>
       </form>
 
+      {/* Google login option */}
       <div className="flex justify-center items-center">
         <GoogleAuthForm />
       </div>

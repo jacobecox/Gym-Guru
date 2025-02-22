@@ -1,10 +1,21 @@
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/app/store/store";
 
 export default function WorkoutPlanButton() {
   const router = useRouter();
-
+  const dispatch = useDispatch<AppDispatch>();
+  const token = useSelector(
+    (state: RootState) => state.authenticate.authenticated
+  );
   const workoutPlan = () => {
+    if (!token) {
+      router.push("/pages/login");
+      alert("Please log in to view workout plan.");
+      return;
+    }
     router.push("/pages/workout-plan");
+    // DISPATCH GET WORKOUT PLAN
   };
 
   return (

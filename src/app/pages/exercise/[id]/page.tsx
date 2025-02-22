@@ -37,6 +37,7 @@ export default function ExerciseDetail() {
     }
   }, [dispatch, id]);
 
+  // Saves exercise when clicked on
   const handleSavedExercises = async () => {
     if (!exerciseDetail || !token) {
       alert("Log in to save an exercise");
@@ -46,7 +47,7 @@ export default function ExerciseDetail() {
       const resultAction = await dispatch(
         saveExercise({ token, exerciseDetail })
       );
-      const result = unwrapResult(resultAction); // Extracts the payload or error
+      const result = unwrapResult(resultAction); // Extracts the payload or error so we can also get error if exercise is already saved
 
       // Reset error and route after confirming success
       dispatch(resetError());
@@ -55,6 +56,14 @@ export default function ExerciseDetail() {
     } catch (err) {
       return err;
     }
+  };
+
+  const handleWorkoutPlan = async () => {
+    if (!exerciseDetail || !token) {
+      alert("Log in to save an exercise");
+      return;
+    }
+    router.push("/pages/add-workout");
   };
 
   // Resets error when component unmounts
@@ -108,7 +117,10 @@ export default function ExerciseDetail() {
             Save Exercise
           </button>
 
-          <button className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500 hover:text-white transition">
+          <button
+            onClick={handleWorkoutPlan}
+            className="text white text-xl sm:text-4xl p-2 m-2 rounded-md bg-yellow-400 hover:bg-yellow-500 hover:text-white transition"
+          >
             Add to My Workout
           </button>
 
