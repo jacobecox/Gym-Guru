@@ -23,3 +23,14 @@ export type FilterCategory = {
   muscle: string;
   equipment: string;
 };
+
+export type WorkoutDay = {
+  day: string;
+  exercises: string[];
+};
+
+export type WorkoutState = {
+  workoutDays: WorkoutDay[];
+  loading: boolean;
+  error: string | null;
+};
