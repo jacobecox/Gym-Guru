@@ -23,6 +23,7 @@ import getSavedExercises from './routes/getSavedExercises.js'
 import getWorkoutDays from './routes/getWorkoutDays.js'
 import postWorkoutExercise from './routes/postWorkoutExercise.js'
 import deleteWorkoutExercise from './routes/deleteWorkoutExercise.js'
+import deleteWorkoutDay from './routes/deleteWorkoutDay.js'
 
 const app = express();  
 dotenv.config({ path: ".env.development.local" });
@@ -141,6 +142,7 @@ app.use(getAllExercises)
 app.use(getWorkoutDays)
 app.use(postWorkoutExercise)
 app.use(deleteWorkoutExercise)
+app.use(deleteWorkoutDay)
 
 // Login required routes
 app.post('/auth/login', requireLogin, Authentication.login);

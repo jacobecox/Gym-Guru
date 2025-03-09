@@ -24,7 +24,7 @@ export default function SavedExercises() {
   };
 
   const handleBack = () => {
-    router.push("/");
+    router.back();
   };
 
   const handleDelete = (e: React.MouseEvent, exerciseId: string) => {

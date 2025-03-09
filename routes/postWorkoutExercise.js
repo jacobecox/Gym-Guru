@@ -10,8 +10,6 @@ router.post("/workout-days", authMiddleware, async (req, res) => {
     const userId = req.user.id;
     const { day } = req.body;
 
-    console.log('day:', day)
-
     if (!day) {
       return res.status(400).json({ message: "Day name is required" });
     }
@@ -38,7 +36,7 @@ router.post("/workout-days", authMiddleware, async (req, res) => {
 });
 
 // Posts workout to workout day
-router.post("/workout-days/:day/exercises", AuthMiddleware, async (req, res) => {
+router.post("/workout-days/:day/exercises", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
     const { day } = req.params;
@@ -48,7 +46,7 @@ router.post("/workout-days/:day/exercises", AuthMiddleware, async (req, res) => 
       return res.status(400).json({ message: "All exercise details are required" });
     }
 
-    const user = await UserModel.findById(userId);
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

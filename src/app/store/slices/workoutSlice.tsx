@@ -5,10 +5,10 @@ import { Exercise } from "@/app/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-// 🏋️‍♂️ Fetch all workout days
+// Fetch all workout days
 export const fetchWorkoutDays = createAsyncThunk(
   "workoutPlan/fetchWorkoutDays",
-  async (token: string, { rejectWithValue }) => {
+  async (token: string | null, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${BASE_URL}/workout-days`, {
         headers: {
@@ -26,11 +26,11 @@ export const fetchWorkoutDays = createAsyncThunk(
   }
 );
 
-// ➕ Add a new workout day
+// Add a new workout day
 export const addWorkoutDay = createAsyncThunk(
   "workoutPlan/addWorkoutDay",
   async (
-    { token, day }: { token: string; day: string },
+    { token, day }: { token: string | null; day: string },
     { rejectWithValue }
   ) => {
     try {
@@ -54,7 +54,7 @@ export const addWorkoutDay = createAsyncThunk(
   }
 );
 
-// 🏋️‍♀️ Add an exercise to a workout day
+// Add an exercise to a workout day
 export const addExerciseToDay = createAsyncThunk(
   "workoutPlan/addExerciseToDay",
   async (
@@ -63,14 +63,13 @@ export const addExerciseToDay = createAsyncThunk(
       day,
       exerciseDetail,
     }: {
-      token: string;
+      token: string | null;
       day: string;
       exerciseDetail: Exercise;
     },
     { rejectWithValue }
   ) => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const response = await axios.post(
         `${BASE_URL}/workout-days/${day}/exercises`,
         exerciseDetail,
@@ -81,7 +80,7 @@ export const addExerciseToDay = createAsyncThunk(
         }
       );
 
-      return { day, exercise: exerciseDetail }; // Return updated data
+      return { day, exercise: response.data.exercise }; // Ensure backend returns saved exercise
     } catch (err: any) {
       console.error(err);
       return rejectWithValue(
@@ -91,7 +90,29 @@ export const addExerciseToDay = createAsyncThunk(
   }
 );
 
-// ❌ Remove an exercise from a workout day
+// Removes workout day
+export const removeWorkoutDay = createAsyncThunk(
+  "workoutPlan/removeWorkoutDay",
+  async (
+    { token, day }: { token: string | null; day: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      await axios.delete(`${BASE_URL}/workout/${day}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      return { day };
+    } catch (err: any) {
+      console.error(err);
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to delete workout day"
+      );
+    }
+  }
+);
+
+// Remove an exercise from a workout day
 export const removeExerciseFromDay = createAsyncThunk(
   "workoutPlan/removeExerciseFromDay",
   async (
@@ -100,7 +121,7 @@ export const removeExerciseFromDay = createAsyncThunk(
       day,
       exerciseId,
     }: {
-      token: string;
+      token: string | null;
       day: string;
       exerciseId: string;
     },
@@ -126,21 +147,21 @@ export const removeExerciseFromDay = createAsyncThunk(
   }
 );
 
-// 💾 Define the state type
+// Define the state type
 type WorkoutPlanState = {
   workoutPlan: { day: string; exercises: Exercise[] }[];
   loading: boolean;
   error?: string | null;
 };
 
-// 🚀 Initial state
+// Initial state
 const initialState: WorkoutPlanState = {
   workoutPlan: [],
   loading: false,
   error: null,
 };
 
-// 🏋️ Redux Slice
+// Redux Slice
 export const workoutPlanSlice = createSlice({
   name: "workoutPlan",
   initialState,
@@ -193,19 +214,16 @@ export const workoutPlanSlice = createSlice({
       .addCase(addExerciseToDay.pending, (state) => {
         state.loading = true;
       })
-      .addCase(
-        addExerciseToDay.fulfilled,
-        (state, action: PayloadAction<{ day: string; exercise: Exercise }>) => {
-          state.loading = false;
-          const workoutDay = state.workoutPlan.find(
-            (wd) => wd.day === action.payload.day
-          );
-          if (workoutDay) {
-            workoutDay.exercises.push(action.payload.exercise);
-          }
-          state.error = null;
+      .addCase(addExerciseToDay.fulfilled, (state, action) => {
+        state.loading = false;
+        const workoutDay = state.workoutPlan.find(
+          (wd) => wd.day === action.payload.day
+        );
+        if (workoutDay) {
+          workoutDay.exercises.push(action.payload.exercise); // ✅ Add the saved exercise to Redux
         }
-      )
+        state.error = null;
+      })
       .addCase(addExerciseToDay.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -237,6 +255,6 @@ export const workoutPlanSlice = createSlice({
   },
 });
 
-// 🔄 Export actions & reducer
+// Export actions & reducer
 export const { resetError } = workoutPlanSlice.actions;
 export default workoutPlanSlice.reducer;
