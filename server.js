@@ -117,22 +117,25 @@ const handleAuthRedirect = (req, res) => {
   }
 };
 
-const port = process.env.PORT || 8080;
-
 const requireAuth = passport.authenticate('jwt');
 const requireLogin = passport.authenticate('local');
 
+const keySet = await keys();
+
 mongoose
-	.connect(keys.MONGO_URI)
-	.then(() => {
-		console.log('🚀 DB Connected!');
-		app.listen(port, () => {
-			console.log('😎 Server listening on PORT', port);
-		});
-	})
-	.catch((err) => {
-		console.log(`❌ DB Connection Error: ${err.message}`);
-	});
+  .connect(keySet.MONGO_URI)
+  .then(() => {
+    console.log('🚀 DB Connected!');
+    if (process.env.NODE_ENV !== "test") { // Prevent server from starting in test mode
+      const port = process.env.PORT || 8080;
+      app.listen(port, () => {
+        console.log('😎 Server listening on PORT', port);
+      });
+    }
+  })
+  .catch((err) => {
+    console.log(`❌ DB Connection Error: ${err.message}`);
+  });
 
 // Non-login required routes
 app.use('/api', getAPICategories)
@@ -155,3 +158,5 @@ app.use(getSavedExercises);
 // Google login and logout routes
 app.get("/auth/google", googleAuth);
 app.get("/auth/google/callback", googleAuth, handleAuthRedirect)
+
+export default app;

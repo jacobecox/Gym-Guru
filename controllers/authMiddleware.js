@@ -6,13 +6,14 @@ export const authMiddleware = async (req, res, next) => {
   try {
     // retrieves token from header
     const token = req.header("Authorization")?.split(" ")[1];
+    const keySet = await keys();
 
     if (!token) {
       return res.status(401).json({ message: "Unauthorized: No token provided" });
     }
 
     // jwt method to decode token to get user id
-    const decoded = jwt.decode(token, keys.TOKEN_SECRET);
+    const decoded = jwt.decode(token, keySet.TOKEN_SECRET);
 
     if (!decoded || !decoded.sub) {
       return res.status(401).json({ message: "Unauthorized: Invalid token" });

@@ -3,15 +3,16 @@ import User from "../models/user.js";
 import keys from "../config/keys.js";
 
 // Create token for user with user id, time given, and expiration date
-export const userToken = (user) => {
+export const userToken = async (user) => {
   const timestamp = Math.round(Date.now() / 1000);
+  const keySet = await keys();
   return jwt.encode(
     {
       sub: user.id, // sub = subject (User ID)
       iat: timestamp, // iat = issued at
       exp: timestamp + 1 * 60 * 60, // exp = expires (in 1 hour)
     },
-    keys.TOKEN_SECRET // secret key for signing token
+    keySet.TOKEN_SECRET // secret key for signing token
   )
 }
 
