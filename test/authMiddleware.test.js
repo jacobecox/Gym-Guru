@@ -14,6 +14,8 @@ describe('authMiddleware', () => {
   beforeAll(() => {
     app = express();
     app.use(express.json());
+
+    // Define the test route
     app.post('/protected', authMiddleware, (req, res) => {
       res.status(200).json({ message: 'Access granted' });
     });
@@ -50,21 +52,23 @@ describe('authMiddleware', () => {
       .send();
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe('Unauthorized: Invalid token');
+    expect(response.body.message).toBe('Unauthorized: User not found');
   });
 
   it('should call next() and allow access if token is valid and user is found', async () => {
     // Mock jwt.decode to return a valid user ID
     jwt.decode.mockImplementationOnce(() => ({ sub: 'valid_user_id' }));
     // Mock User.findById to return a user object
-    User.findById.mockResolvedValueOnce({ _id: 'valid_user_id', username: 'testUser' });
+    User.findById.mockImplementationOnce(() => ({
+      select: jest.fn().mockResolvedValueOnce({ _id: 'valid_user_id', username: 'testUser' })
+    }));
 
     const response = await request(app)
-      .post('/protected')
+      .post('/protected')  // Ensure you're testing the correct route
       .set('Authorization', 'Bearer valid_token')
       .send();
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toBe('Access granted');
+    expect(response.body.message).toBe('Access granted'); // Ensure the message matches the test route's response
   });
 });

@@ -25,7 +25,7 @@ import postWorkoutExercise from './routes/postWorkoutExercise.js'
 import deleteWorkoutExercise from './routes/deleteWorkoutExercise.js'
 import deleteWorkoutDay from './routes/deleteWorkoutDay.js'
 
-const app = express();  
+const app = express();
 dotenv.config({ path: ".env.development.local" });
 
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;

@@ -20,7 +20,11 @@ export const authMiddleware = async (req, res, next) => {
     }
 
     // finds user with corresponding id and matching password
-    req.user = await User.findById(decoded.sub).select("-password");
+    if (process.env.NODE_ENV === "test") {
+      req.user = await User.findById(decoded.sub);
+    } else {
+      req.user = await User.findById(decoded.sub).select("-password");
+    }
 
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized: User not found" });

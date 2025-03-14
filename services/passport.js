@@ -7,6 +7,8 @@ import keys from "../config/keys.js";
 // Passport expects username field to be a username, we are specifying the username field to be either email or username
 const localOptions = { usernameField: 'login' };
 
+const keySet = await keys();
+
 const localLogin = new LocalStrategy(localOptions, async (login, password, done) => {
   // Verify this email and password, call done with the user
 	// if it is the correct email and password
@@ -30,7 +32,7 @@ const localLogin = new LocalStrategy(localOptions, async (login, password, done)
 // Retrieve token from header and use token secret to verify jwt
 const jwtOptions = {
 	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-	secretOrKey: keys.TOKEN_SECRET,
+	secretOrKey: keySet.TOKEN_SECRET,
 };
 
 // Create JWT Strategy
