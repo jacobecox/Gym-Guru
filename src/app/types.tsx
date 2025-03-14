@@ -34,3 +34,8 @@ export type WorkoutState = {
   loading: boolean;
   error: string | null;
 };
+
+export type JwtPayload = {
+  exp?: number;
+  sub?: string;
+};

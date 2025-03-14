@@ -4,6 +4,8 @@ import { useRouter, usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { fetchUser, logout } from "../store/slices/authenticate";
+import { jwtDecode } from "jwt-decode";
+import { JwtPayload } from "../types";
 
 export default function NavBar() {
   const [isMounted, setIsMounted] = useState(false);
@@ -53,10 +55,22 @@ export default function NavBar() {
   }, [authenticated]);
 
   useEffect(() => {
-    if (authenticated && token) {
-      dispatch(fetchUser());
+    if (token && authenticated) {
+      try {
+        const decoded: JwtPayload = jwtDecode(token);
+
+        if (!decoded.exp || decoded.exp * 1000 < Date.now()) {
+          // If 'exp' is missing or expired, log out
+          dispatch(logout());
+        } else {
+          dispatch(fetchUser());
+        }
+      } catch (error) {
+        console.error("Invalid token", error);
+        dispatch(logout());
+      }
     }
-  }, [authenticated, token, dispatch]);
+  }, [dispatch, authenticated, token]);
 
   const handleLogin = () => {
     router.push("/pages/login");
@@ -116,7 +130,7 @@ export default function NavBar() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex pb-10">
       <div className="flex items-center justify-start pt-5 px-4 z-10">
         {/* Dark mode toggle */}
         <p className="text-black dark:text-white font-bold px-2">Mode</p>

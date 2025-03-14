@@ -103,19 +103,25 @@ const googleAuth = passport.authenticate("google", {
   scope: ["profile", "email"] })
 
 // Handles when google send user back with data. We store user data with token in url params to be sent back when redirected to our success page
-const handleAuthRedirect = (req, res) => {
-  if (req.isAuthenticated()) {
-    const user = {
-      email: req.user.email,
-      username: req.user.username,
-      token: Authentication.userToken(req.user),
-    };
+const handleAuthRedirect = async (req, res) => {
 
-    res.redirect(`${BASE_URL}/pages/login-success?token=${user.token}`);
+  if (req.isAuthenticated() && req.user) {
+    try {
+      const token = await Authentication.userToken(req.user); // ✅ Await the token properly
+
+      res.redirect(`${BASE_URL}/pages/login-success?token=${encodeURIComponent(token)}`);
+    } catch (error) {
+      console.error("❌ Error generating token:", error);
+      res.redirect(`${BASE_URL}/pages/login?error=token_generation_failed`);
+    }
   } else {
+    console.error("❌ User not authenticated");
     res.redirect(`${BASE_URL}/pages/login?error=auth_failed`);
   }
 };
+
+
+
 
 const requireAuth = passport.authenticate('jwt');
 const requireLogin = passport.authenticate('local');
