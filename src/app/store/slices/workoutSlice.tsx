@@ -127,6 +127,7 @@ export const removeExerciseFromDay = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
+    console.log("removing exercise in slice");
     try {
       await axios.delete(
         `${BASE_URL}/workout-days/${day}/exercises/${exerciseId}`,

@@ -30,6 +30,10 @@ export default function WorkoutPlan() {
     router.back();
   };
 
+  useEffect(() => {
+    dispatch(resetError());
+  }, [dispatch]);
+
   const [newDay, setNewDay] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
   const [exerciseError, setExerciseError] = useState("");

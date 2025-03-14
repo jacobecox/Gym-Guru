@@ -55,7 +55,7 @@ export default function SavedExercises() {
       </div>
 
       {/* Handle no exercises */}
-      {savedExercises.length === 0 ? (
+      {savedExercises === undefined || savedExercises.length === 0 ? (
         <p className="text-black dark:text-white font-extrabold text-4xl text-center">
           No exercises found
         </p>

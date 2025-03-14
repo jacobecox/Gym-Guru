@@ -18,12 +18,16 @@ export const userToken = async (user) => {
 
 
 // When user logs in, they receive back the user's email and token to make authenticated requests
-export const login = (req, res) => {
+export const login = async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: "Authentication failed" });
   }
-  res.send({ email: req.user.email, username: req.user.username, token: userToken(req.user) })
-}
+
+  const token = await userToken(req.user); // Await the token creation
+
+  res.send({ email: req.user.email, username: req.user.username, token });
+};
+
 
 
 // Function to create a user which has current user's email and token
@@ -66,7 +70,8 @@ export const createAccount = async (req, res, next) => {
 
     await user.save()
 
-    res.json({ token: userToken(user) })
+    res.json({ token: await userToken(user) }); // Await the token
+
   } catch (err) {
     next(err)
   }

@@ -6,44 +6,52 @@ import { RootState, AppDispatch } from "../store/store";
 import { fetchUser, logout } from "../store/slices/authenticate";
 
 export default function NavBar() {
-  // Dark Mode Settings
-  const [theme, setTheme] = useState("light");
+  const [isMounted, setIsMounted] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "light"; // Grabs current theme in local storage else uses light theme
-    setTheme(savedTheme); // Sets state to that theme
-    document.documentElement.classList.toggle("dark", savedTheme === "dark"); // If current theme is set to dark, switches to dark
+    setIsMounted(true);
+    const savedTheme =
+      (localStorage.getItem("theme") as "light" | "dark") || "light";
+    setTheme(savedTheme);
+    document.documentElement.classList.toggle("dark", savedTheme === "dark");
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light"; // Checks theme to see if it equals current theme
-    setTheme(newTheme); // Sets theme to new theme selected
+    const newTheme: "light" | "dark" = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
-    localStorage.setItem("theme", newTheme); // Persist theme into local storage to be saved
+    localStorage.setItem("theme", newTheme);
   };
 
   const pathName = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleClick = () => {
     router.push("/");
   };
 
-  const dispatch = useDispatch<AppDispatch>();
-
   const [token, setToken] = useState<string | null>(null);
-
   useEffect(() => {
-    // Runs only on the client
     const storedToken = window.localStorage.getItem("token");
     setToken(storedToken);
+  }, []);
+
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
   }, []);
 
   const { authenticated, username } = useSelector(
     (state: RootState) => state.authenticate
   );
 
-  // If user is authenticated then calls for user info
+  const [isAuthenticated, setIsAuthenticated] = useState(authenticated);
+  useEffect(() => {
+    setIsAuthenticated(authenticated);
+  }, [authenticated]);
+
   useEffect(() => {
     if (authenticated && token) {
       dispatch(fetchUser());
@@ -64,7 +72,8 @@ export default function NavBar() {
   };
 
   const renderLinks = () => {
-    if (authenticated) {
+    if (!isClient) return null;
+    if (isAuthenticated && isMounted) {
       return (
         <div className="flex justify-end items-center absolute top-6 right-10">
           <h1 className="dark:text-yellow-400 text-black font-extrabold px-6">
@@ -124,7 +133,7 @@ export default function NavBar() {
       </div>
       <div>{renderLinks()}</div>
       {/* Home Button */}
-      {pathName !== "/" && ( // Not displayed on home page
+      {pathName !== "/" && (
         <div className="flex justify-normal items-center pt-5">
           <button
             onClick={handleClick}

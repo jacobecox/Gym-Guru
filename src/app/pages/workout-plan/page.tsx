@@ -11,7 +11,7 @@ import {
   removeWorkoutDay,
   addWorkoutDay,
 } from "@/app/store/slices/workoutSlice";
-import { deleteExercise } from "@/app/store/slices/savedExerciseAcions";
+import { removeExerciseFromDay } from "@/app/store/slices/workoutSlice";
 
 export default function WorkoutPlan() {
   const router = useRouter();
@@ -55,7 +55,7 @@ export default function WorkoutPlan() {
 
   const handleDelete = (e: React.MouseEvent, exerciseId: string) => {
     e.stopPropagation();
-    dispatch(deleteExercise({ token, exerciseId }));
+    dispatch(removeExerciseFromDay({ token, day: selectedDay, exerciseId }));
   };
 
   const handleDeleteDay = () => {
