@@ -37,7 +37,7 @@ export default function App() {
       <NavBar />
       <div className="px-10">
         <h1 className="text-center font-extrabold text-8xl pt-28    tracking-wider bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent">
-          GYM GURU
+          GYM GURUS
         </h1>
         <p className="text-center font-bold text-xl p-2 text-black dark:text-white tracking-wide">
           Your ultimate gym trainer
@@ -53,11 +53,11 @@ export default function App() {
         <div className="flex flex-col xl:flex-row justify-center py-2 items-center">
           <div className="text-center text-xl dark:text-white w-screen sm:p-10 px-4">
             <p className="font-bold text-5xl my-2 text-black dark:text-white">
-              Gym Guru creates a simplified exercise discovery process.
+              Gym Gurus creates a simplified exercise discovery process.
             </p>
             <p className="py-2 text-yellow-600 text-xl sm:mx-10">
               Rather than experimenting in the gym and searching the web to find
-              the proper form, Gym Guru gives you the power to discover new
+              the proper form, Gym Gurus gives you the power to discover new
               exercises, learn proper form and technique, and save your favorite
               exercises all in one app!
             </p>

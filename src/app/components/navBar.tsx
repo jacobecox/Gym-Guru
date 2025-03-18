@@ -153,7 +153,7 @@ export default function NavBar() {
             onClick={handleClick}
             className="font-extrabold text-xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent flex justify-start z-10"
           >
-            GYM GURU
+            GYM GURUS
           </button>
         </div>
       )}
