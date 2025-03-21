@@ -31,6 +31,7 @@ dotenv.config({ path: ".env.development.local" });
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const BASE_URL = process.env.NEXT_PUBLIC_FRONT_BASE_URL;
+const BACK_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 app.use(express.json());
 app.use(cors({
@@ -109,14 +110,14 @@ const handleAuthRedirect = async (req, res) => {
     try {
       const token = await Authentication.userToken(req.user); // ✅ Await the token properly
 
-      res.redirect(`${BASE_URL}/pages/login-success?token=${encodeURIComponent(token)}`);
+      res.redirect(`${BACK_BASE_URL}/pages/login-success?token=${encodeURIComponent(token)}`);
     } catch (error) {
       console.error("❌ Error generating token:", error);
-      res.redirect(`${BASE_URL}/pages/login?error=token_generation_failed`);
+      res.redirect(`${BACK_BASE_URL}/pages/login?error=token_generation_failed`);
     }
   } else {
     console.error("❌ User not authenticated");
-    res.redirect(`${BASE_URL}/pages/login?error=auth_failed`);
+    res.redirect(`${BACK_BASE_URL}/pages/login?error=auth_failed`);
   }
 };
 

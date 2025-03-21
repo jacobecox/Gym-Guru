@@ -34,7 +34,7 @@ export default function AllExercises() {
     (state: RootState) => state.categories.equipmentCategories
   );
 
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  const BASE_URL = process.env.NEXT_PUBLIC_FRONT_BASE_URL;
 
   useEffect(() => {
     const fetchResults = async () => {
