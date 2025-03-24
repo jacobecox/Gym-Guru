@@ -9,14 +9,19 @@ export default function SavedExercisesButton() {
   const token = useSelector(
     (state: RootState) => state.authenticate.authenticated
   );
-  const savedExercises = () => {
+  const savedExercises = async () => {
     if (!token) {
       router.push("/pages/login");
       alert("Please log in to view saved exercises.");
       return;
     }
-    dispatch(fetchSavedExercises(token));
-    router.push("/pages/saved-exercises");
+    try {
+      await dispatch(fetchSavedExercises(token));
+
+      router.push("/pages/saved-exercises");
+    } catch (error) {
+      console.error("Error fetching saved exercises:", error);
+    }
   };
 
   return (

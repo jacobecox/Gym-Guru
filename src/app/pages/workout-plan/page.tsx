@@ -95,9 +95,26 @@ export default function WorkoutPlan() {
       </div>
 
       {workoutPlan.length === 0 ? (
-        <p className="text-black dark:text-white font-extrabold text-4xl text-center mt-8">
-          No workout plan found. Start by adding workout days!
-        </p>
+        <div className="flex items-center justify-center">
+          <div className="mb-6 flex flex-col gap-4 lg:w-1/4 w-3/4">
+            <p className="text-black dark:text-white font-extrabold text-4xl text-center mt-8">
+              No workout plan found. Start by adding workout days!
+            </p>
+            <input
+              type="text"
+              placeholder="Enter workout day (e.g., 'Day 1 - Upper Body')"
+              value={newDay}
+              onChange={(e) => setNewDay(e.target.value)}
+              className="bg-gray-900 border-4 border-yellow-400 text-white p-2"
+            />
+            <button
+              onClick={handleAddWorkoutDay}
+              className="w-full bg-yellow-400 text-black text-xl font-bold py-2 rounded-lg hover:bg-yellow-300 transition"
+            >
+              ➕ Add Workout Day
+            </button>
+          </div>
+        </div>
       ) : (
         <>
           <div className="flex justify-center gap-4 mt-6">

@@ -9,14 +9,20 @@ export default function WorkoutPlanButton() {
   const token = useSelector(
     (state: RootState) => state.authenticate.authenticated
   );
-  const workoutPlan = () => {
+
+  const workoutPlan = async () => {
     if (!token) {
       router.push("/pages/login");
       alert("Please log in to view workout plan.");
       return;
     }
-    dispatch(fetchWorkoutDays(token));
-    router.push("/pages/workout-plan");
+    try {
+      await dispatch(fetchWorkoutDays(token));
+
+      router.push("/pages/workout-plan");
+    } catch (error) {
+      console.error("Error fetching workout plan:", error);
+    }
   };
 
   return (
