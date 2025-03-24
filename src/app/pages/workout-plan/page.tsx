@@ -62,10 +62,15 @@ export default function WorkoutPlan() {
     setShowDeletePopup(true);
   };
 
-  const confirmDeleteDay = () => {
-    dispatch(removeWorkoutDay({ token, day: selectedDay }));
+  const confirmDeleteDay = async () => {
+    await dispatch(removeWorkoutDay({ token, day: selectedDay }));
+
     setShowDeletePopup(false);
-    dispatch(fetchWorkoutDays(token));
+
+    // Wait a bit before refetching to ensure Redux updates UI
+    setTimeout(() => {
+      dispatch(fetchWorkoutDays(token));
+    }, 500); // Small delay to let Redux state update
   };
 
   const cancelDeleteDay = () => {
