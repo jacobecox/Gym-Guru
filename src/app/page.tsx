@@ -29,6 +29,11 @@ export default function App() {
   };
 
   const workoutPlan = () => {
+    if (!token) {
+      router.push("/pages/login");
+      alert("Please log in to view your workout plan.");
+      return;
+    }
     router.push("/pages/workout-plan");
   };
 
