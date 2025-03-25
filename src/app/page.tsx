@@ -41,7 +41,7 @@ export default function App() {
     <main className="bg-white dark:bg-black">
       <NavBar />
       <div className="px-10">
-        <h1 className="text-center font-extrabold text-8xl pt-28    tracking-wider bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent">
+        <h1 className="text-center font-extrabold text-6xl lg:text-8xl pt-10 lg:pt-20 tracking-wider bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent">
           GYM GURUS
         </h1>
         <p className="text-center font-bold text-xl p-2 text-black dark:text-white tracking-wide">
@@ -57,7 +57,7 @@ export default function App() {
         </div>
         <div className="flex flex-col xl:flex-row justify-center py-2 items-center">
           <div className="text-center text-xl dark:text-white w-screen sm:p-10 px-4">
-            <p className="font-bold text-5xl my-2 text-black dark:text-white">
+            <p className="font-bold text-2xl lg:text-5xl my-2 text-black dark:text-white">
               Gym Gurus creates a simplified exercise discovery process.
             </p>
             <p className="py-2 text-yellow-600 text-xl sm:mx-10">
@@ -71,22 +71,22 @@ export default function App() {
               can create a workout plan tailored with your favorite exercises.
             </p>
           </div>
-          <div className="flex flex-col space-y-4 items-stretch justify-center max-w-lg mx-auto w-full py-4">
+          <div className="flex flex-col space-y-4 items-stretch justify-center max-w-lg mx-auto w-full py-4 mb-6">
             <button
               onClick={exploreExercises}
-              className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400 transition"
+              className="text-center bg-black text-white dark:bg-white dark:text-black text-3xl lg:text-5xl shadow-lg rounded-md p-4 lg:p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400 transition"
             >
               Explore Exercises
             </button>
             <button
               onClick={savedExercises}
-              className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400 transition"
+              className="text-center bg-black text-white dark:bg-white dark:text-black text-3xl lg:text-5xl shadow-lg rounded-md p-4 lg:p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400 transition"
             >
               My Saved Exercises
             </button>
             <button
               onClick={workoutPlan}
-              className="text-center bg-black text-white dark:bg-white dark:text-black text-5xl shadow-lg rounded-md p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400 transition"
+              className="text-center bg-black text-white dark:bg-white dark:text-black text-3xl lg:text-5xl shadow-lg rounded-md p-4 lg:p-8 gap-4 hover:bg-yellow-400 dark:hover:bg-yellow-400 transition"
             >
               My Workout Plan
             </button>

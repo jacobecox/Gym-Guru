@@ -130,7 +130,7 @@ export default function NavBar() {
   };
 
   return (
-    <div className="flex pb-10">
+    <div className="flex flex-col pb-4">
       <div className="flex items-center justify-start pt-5 px-4 z-10">
         {/* Dark mode toggle */}
         <p className="text-black dark:text-white font-bold px-2">Mode</p>
@@ -148,7 +148,7 @@ export default function NavBar() {
       <div>{renderLinks()}</div>
       {/* Home Button */}
       {pathName !== "/" && (
-        <div className="flex justify-normal items-center pt-5">
+        <div className="flex justify-normal items-center pt-4 px-4">
           <button
             onClick={handleClick}
             className="font-extrabold text-xl bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent flex justify-start z-10"

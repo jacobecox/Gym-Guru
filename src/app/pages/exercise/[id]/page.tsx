@@ -88,7 +88,7 @@ export default function ExerciseDetail() {
         </div>
 
         {/* Exercise Name */}
-        <p className="text-center bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent font-extrabold text-7xl p-5 uppercase tracking-wide">
+        <p className="text-center bg-gradient-to-r from-red-400 via-yellow-500 to-red-400 bg-clip-text text-transparent font-extrabold text-6xl lg:text-7xl p-5 uppercase tracking-wide">
           {exerciseDetail?.name}
         </p>
 

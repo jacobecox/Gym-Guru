@@ -93,7 +93,7 @@ export default function AllExercises() {
         {/* Back button */}
         <button
           onClick={() => router.back()}
-          className="text-left bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 mx-4 mt-16 hover:bg-yellow-300 hover:text-white dark:hover:bg-white transition"
+          className="text-left bg-yellow-400 text-black dark:bg-yellow-400 dark:text-black text-2xl shadow-lg rounded-md px-4 mx-2 mt-6 hover:bg-yellow-300 hover:text-white dark:hover:bg-white transition"
         >
           Back
         </button>
@@ -172,7 +172,7 @@ export default function AllExercises() {
               }}
               className="bg-gray-900 hover:bg-gray-800 rounded-lg p-6 m-2 transition"
             >
-              <h1 className=" font-extrabold text-5xl text-center tracking-wide text-yellow-400 uppercase">
+              <h1 className=" font-extrabold text-3xl lg:text-5xl text-center tracking-wide text-yellow-400 uppercase">
                 {exercise.exercise.name}
               </h1>
               <div className="flex flex-col flex-wrap sm:flex-row justify-between m-4 items-center">
@@ -180,7 +180,7 @@ export default function AllExercises() {
                   <h1 className="text-yellow-600 text-xl text-center">
                     Muscle:
                   </h1>
-                  <p className="dark:text-yellow-400 text-black text-3xl font-bold text-center uppercase">
+                  <p className="dark:text-yellow-400 text-black text-2xl lg:text-3xl font-bold text-center uppercase">
                     {exercise.exercise.target}
                   </p>
                 </div>
@@ -188,7 +188,7 @@ export default function AllExercises() {
                   <h1 className="text-yellow-600 text-xl text-center">
                     Equipment:
                   </h1>
-                  <p className="dark:text-yellow-400 text-black text-3xl font-bold text-center uppercase">
+                  <p className="dark:text-yellow-400 text-black text-2xl lg:text-3xl font-bold text-center uppercase">
                     {exercise.exercise.equipment}
                   </p>
                 </div>
