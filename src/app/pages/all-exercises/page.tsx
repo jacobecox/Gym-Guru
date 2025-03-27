@@ -42,8 +42,8 @@ export default function AllExercises() {
       try {
         const params = new URLSearchParams({
           page: String(currentPage),
-          muscle: filters.muscle,
-          equipment: filters.equipment,
+          muscle: filters.muscle || "",
+          equipment: filters.equipment || "",
         });
 
         const res = await fetch(`${BASE_URL}/all-exercises?${params}`);
@@ -62,7 +62,7 @@ export default function AllExercises() {
     };
 
     fetchResults();
-  }, [filters.muscle, filters.equipment, currentPage, BASE_URL]);
+  }, [filters, currentPage, BASE_URL]);
 
   const handlePageChange = (page: number) => {
     // Sets the current page to change to whatever page was selected

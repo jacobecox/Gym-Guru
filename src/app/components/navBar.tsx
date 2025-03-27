@@ -131,11 +131,13 @@ export default function NavBar() {
 
   return (
     <div className="flex flex-col pb-4">
-      <div className="flex items-center justify-start pt-5 px-4 z-10">
+      <div className="flex items-center justify-start pt-5 px-4 z-10 pointer-events-none">
         {/* Dark mode toggle */}
-        <p className="text-black dark:text-white font-bold px-2">Mode</p>
+        <p className="text-black dark:text-white font-bold px-2 pointer-events-auto">
+          Mode
+        </p>
         <button
-          className="relative w-16 h-8 bg-black dark:bg-yellow-400 rounded-full cursor-pointer flex items-center"
+          className="relative w-16 h-8 bg-black dark:bg-yellow-400 rounded-full cursor-pointer pointer-events-auto flex items-center"
           onClick={toggleTheme}
         >
           <div
